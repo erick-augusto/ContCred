@@ -373,10 +373,6 @@ public class FileController extends HttpServlet {
 								cursada.setNome(cursada.getNome().toUpperCase());
 								cursadas.add(cursada);
 							}
-							/*if(pendentes.size() > 0 && !pendentes.contains(cursada.getNome())){
-								cursada.setNome(cursada.getNome().toUpperCase());
-								cursadas.add(cursada);
-							}*/
 						} else if(cursada.getCod_disciplina() == null && campos.length > 1){
 							if(campos.length > 2 && (campos[5].equals("Aprovado") || campos[5].equals("Apr.S.Nota") 
 									|| campos[5].equals("Disc.Equiv") || campos[5].equals("Aproveitamento"))){
