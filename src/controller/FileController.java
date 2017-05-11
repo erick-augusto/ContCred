@@ -137,46 +137,7 @@ public class FileController extends HttpServlet {
 		System.out.println("bct "+ultimo_projeto+": "+grade_bct.size()+" total: "+cred_obrigatorio_bct);
 		
 		gravarArquivo(req);
-		
-		//Gravar o arquivo do histórico do aluno
-		/*String path = "C:\\Users\\Erick\\Documents\\Eclipse Projects\\ContCred\\files\\";
-		Part filePart = req.getPart("file");
-	    String fileName = getFileName(filePart);
-	    System.out.println(fileName);
-	    OutputStream out = null;
-	    InputStream filecontent = null;
-	    //PrintWriter writer = resp.getWriter();
 
-	    try {
-	        out = new FileOutputStream(new File(path + fileName));
-	        filecontent = filePart.getInputStream();
-	        int read = 0;
-	        final byte[] bytes = new byte[1024];
-
-	        while ((read = filecontent.read(bytes)) != -1) {
-	            out.write(bytes, 0, read);
-	        }
-	        //writer.println("New file " + fileName + " created at " + path);
-	        //LOGGER.log(Level.INFO, "File{0}being uploaded to {1}", new Object[]{fileName, path});
-	    } catch (FileNotFoundException fne) {
-	        //writer.println("You either did not specify a file to upload or are "
-	                + "trying to upload a file to a protected or nonexistent "
-	                + "location.");//
-	        //writer.println("<br/> ERROR: " + fne.getMessage());
-	        //LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}", new Object[]{fne.getMessage()});
-	    } finally {
-	        if (out != null) {
-	            out.close();
-	        }
-	        if (filecontent != null) {
-	            filecontent.close();
-	        }
-	        //if (writer != null) {
-	            writer.close();
-	        }//
-	        System.out.print("Finalizado");
-	    }*/
-	    
 	    cursadas = lerHistorico(path,fileName);
 	    System.out.println("pendentes: "+pendentes.size());
 	    nao_encontradas = new ArrayList<>();
@@ -204,45 +165,6 @@ public class FileController extends HttpServlet {
 			} else if(cursada.getNome().equals("Programação Estruturada")){
 				pe = true;
 			}
-			/*encontrada = false;
-			//System.out.println("cod para verificar: "+cursada.getCod_disciplina());
-			for(i=0;i<grade_ppc.size();i++){
-				//System.out.println(grade_ppc.get(i).getCod_disciplina());
-				String cod = grade_ppc.get(i).getCod_disciplina();
-				if(cod.equals(cursada.getCod_disciplina())){
-					encontrada = true;
-					//creditos += cursada.getT() + cursada.getP();
-					
-					//verifica se é obrigatória ou limitada
-					String status = grade_ppc.get(i).getStatus();
-					if(status.equals("Obrigatória")){
-						//cred_obrigatorio += cursada.getT() + cursada.getP();
-						cursado_obrigatorio_curso += cursada.getT() + cursada.getP();
-						obrigatorias.add(cursada);
-					} else{
-						cursado_limitado+= cursada.getT() + cursada.getP();
-						limitadas.add(cursada);
-					}
-				}
-			}
-			for(i=0;i<grade_bct.size();i++){
-				String cod = grade_bct.get(i).getCod_disciplina();
-				if(cod.equals(cursada.getCod_disciplina())){
-					encontrada= true;
-					
-					//verifica se é obrigatória
-					String status = grade_bct.get(i).getStatus();
-					if(status.equals("Obrigatória")){
-						//cred_obrigatorio += cursada.getT() + cursada.getP();
-						cursado_bct += cursada.getT() + cursada.getP();
-						obrigatoria_bct.add(cursada);
-					}
-				}
-			}
-			//Disciplina não encontrada
-			if(encontrada == false){
-				nao_encontradas.add(cursada);
-			}*/
 		}
 		System.out.println("Não Encontradas: "+nao_encontradas.size());
 		
@@ -254,79 +176,10 @@ public class FileController extends HttpServlet {
 		if(!nao_encontradas.isEmpty()){
 			//System.out.println("Convalidações");
 			buscaConvalidacoes(p_id, cod_ppc);
-			/*for(Disciplina nao_encontrada : nao_encontradas){
-				//System.out.println(nao_encontrada.getCod_disciplina()+" "+p_id);
-				Convalidacao c = c_dao.buscaConvalidacao(nao_encontrada.getCod_disciplina(), p_id);
-				if(c.getCod_convalidacao() != null){
-					//System.out.println("c: "+c.getCod_convalidacao());
-					convalidacoes.add(c);
-				} else{
-					//Conta como livre
-					//System.out.println("n: "+nao_encontrada.getCod_disciplina()+" "+nao_encontrada.getNome());
-					livres.add(nao_encontrada);
-				}
-			}*/
 			System.out.println("Convalidadas: "+convalidacoes.size());
 			boolean convalidado;
 			for(Convalidacao convalidacao: convalidacoes){
 				verificaConvalidacao(convalidacao);
-				/*convalidado = false;
-				//Verifica na grade do ppc
-				for(i=0;i<grade_ppc.size();i++){
-					String cod = grade_ppc.get(i).getCod_disciplina();
-					if(cod.equals(convalidacao.getCod_convalidacao())){
-						convalidado = true;
-						//Disciplina d = d_dao.buscaDisciplina(convalidacao.getCod_convalidacao());
-						//creditos += d.getT() + d.getP();
-								
-						//System.out.println("convalidada: "+d.getNome()+" "+d.getT()+" "+d.getP());
-						//verifica se é obrigatória ou limitada
-						String status = grade_ppc.get(i).getStatus();
-						if(status.equals("Obrigatória")){
-							//Buscar a disciplina de origem para adicionar os créditos e colocar na lista
-							Disciplina convalidada = d_dao.buscaDisciplina(convalidacao.getCod_disciplina());
-							//cred_obrigatorio += convalidada.getT() + convalidada.getP();//d.getT() + d.getP();
-							cursado_obrigatorio_curso += convalidada.getT() + convalidada.getP();
-							obrigatorias.add(convalidada);
-							System.out.println("origem: "+convalidada.getNome()+" "+convalidada.getT()+" "+convalidada.getP());
-						} else{
-							//Buscar a disciplina de origem para adicionar os créditos e colocar na lista
-							Disciplina convalidada = d_dao.buscaDisciplina(convalidacao.getCod_disciplina());
-							cursado_limitado+= convalidada.getT() + convalidada.getP();//d.getT() + d.getP();
-							limitadas.add(convalidada);
-							System.out.println("origem: "+convalidada.getNome()+" "+convalidada.getT()+" "+convalidada.getP());
-						}
-					}
-				}
-				//Verifica na grade do bct
-				for(i=0;i<grade_bct.size();i++){
-					String cod = grade_bct.get(i).getCod_disciplina();
-					if(cod.equals(convalidacao.getCod_convalidacao())){
-						convalidado = true;
-						//Disciplina d = d_dao.buscaDisciplina(convalidacao.getCod_convalidacao());
-								
-						//System.out.println("convalidada: "+d.getNome()+" "+d.getT()+" "+d.getP());
-						//verifica se é obrigatória
-						String status = grade_ppc.get(i).getStatus();
-						if(status.equals("Obrigatória")){
-							//Buscar a disciplina de origem para adicionar os créditos e colocar na lista
-							Disciplina convalidada = d_dao.buscaDisciplina(convalidacao.getCod_disciplina());
-							//cred_obrigatorio += convalidada.getT() + convalidada.getP();//d.getT() + d.getP();
-							cursado_bct += convalidada.getT() + convalidada.getP();
-							obrigatorias.add(convalidada);
-							System.out.println("origem: "+convalidada.getNome()+" "+convalidada.getT()+" "+convalidada.getP());
-						}
-					}
-				}
-				//Convalidação não encontrada nos projetos pedagógicos
-				if(convalidado == false){
-					//Conta os créditos como livres
-					//Buscar a disciplina de origem para adicionar os créditos e colocar na lista
-					Disciplina convalidada = d_dao.buscaDisciplina(convalidacao.getCod_disciplina());
-					//Disciplina d = d_dao.buscaDisciplina(convalidacao.getCod_convalidacao());
-					livres.add(convalidada);
-					System.out.println("origem: "+convalidada.getNome()+" "+convalidada.getT()+" "+convalidada.getP());
-				}*/
 			}
 		}
 		
@@ -377,11 +230,6 @@ public class FileController extends HttpServlet {
 				compensados = reduzidos;
 			}
 			cursado_livre += excedente;
-			/*if(excedente + cursado_livre >= 12){
-				cursado_livre = 12;
-			} else{
-				cursado_livre += excedente;
-			}*/
 		}
 		if(compensados > 0){
 			cursado_obrigatorio_curso += compensados;
@@ -427,25 +275,7 @@ public class FileController extends HttpServlet {
 		req.setAttribute("limitadas", limitadas);
 		req.setAttribute("livres", livres);
 		req.setAttribute("nao_catalogadas", nao_catalogada);
-		
-		//Não funciona
-		/*resp.setContentType("aplication/pdf");
-		PrintWriter o = new PrintWriter("Relatori27.pdf");
-		o = resp.getWriter();
-		String filepath = "C:\\Users\\Erick\\Documents\\eclipse\\Relatorio27.pdf";
-		resp.setHeader("Content-Disposition", "inline; filename=" + filepath + ";");
-		FileOutputStream fileout = new FileOutputStream("C:\\Users\\Erick\\Documents\\eclipse\\Relatorio27.pdf");
-		fileout.close();
-		o.close();*/
-		//Funciona
-		/*String serverHomeDir = System.getenv("CATALINA_HOME");
-		String reportDestination = "C:\\Users\\Erick\\Documents\\eclipse\\Relatorio27.pdf";
-		FileInputStream fis = new FileInputStream(new File(reportDestination));
-		org.apache.commons.io.IOUtils.copy(fis, resp.getOutputStream());
-		resp.setContentType("aplication/pdf");
-		resp.setHeader("Content-Disposition", "attachment; filename=" + reportDestination);
-		resp.flushBuffer();*/
-		
+
 		//Método para escolher a forma de exibição do relatório
 		if(opcao.equals("abrir")){
 			RequestDispatcher rd = req.getRequestDispatcher("/relatorio.jsp");
