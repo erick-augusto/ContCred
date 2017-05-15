@@ -2,16 +2,8 @@ package controller;
 
 import java.awt.Desktop;
 
-//import org.apache.tomcat.util.http.fileupload.*;
-//import org.apache.tomcat.util.http.fileupload.disk.*;
-//import org.apache.tomcat.util.http.fileupload.servlet.*;
-
-//import java.util.Iterator;
-//import java.util.List;
 import java.io.*;
 import java.util.ArrayList;
-//import java.util.Iterator;
-//import java.util.List;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -23,14 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-//import javax.servlet.http.HttpServlet;
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpServletResponse;
-
-//import org.apache.commons.fileupload.FileItem;
-//import org.apache.commons.fileupload.FileItemFactory;
-//import org.apache.commons.fileupload.FileUploadException;
-//import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.itextpdf.text.BaseColor;
@@ -100,11 +84,11 @@ public class FileController extends HttpServlet {
 		ra = Integer.parseInt(req.getParameter("ra"));
 		sigla = req.getParameter("curso");
 		matriz = Integer.parseInt(req.getParameter("matriz"));
-		//Determina qual curso será feita a contagem
+		//Determina qual curso serÃ¡ feita a contagem
 		curso = determinaCurso(sigla);
 		String opcao = req.getParameter("opcao");
 		System.out.println("opcao: "+opcao);
-		//Buscar a lista de matérias da matriz do curso
+		//Buscar a lista de matÃ©rias da matriz do curso
 		ProjetoDAO p_dao = new ProjetoDAO();
 		int p_id = p_dao.buscaProjeto(matriz, curso);
 		System.out.println("cod: "+p_id);
@@ -121,7 +105,7 @@ public class FileController extends HttpServlet {
 		cred_curso_livre = projeto.getCred_livres();
 		cred_apenas_curso = cred_obrigatorio_curso + cred_limitado_curso + cred_curso_livre;
 		
-		//Método para determinar qual matriz do BC&T usar
+		//MÃ©todo para determinar qual matriz do BC&T usar
 		List<PPC> bct = p_dao.listaProjetos();
 		int ultimo_projeto = 0;
 		int cod_ppc = 0;
@@ -144,7 +128,6 @@ public class FileController extends HttpServlet {
 		obrigatorias = new ArrayList<>();
 		limitadas = new ArrayList<>();
 		obrigatoria_bct = new ArrayList<>();
-		//int cred_obrigatorio = 0;
 		cursado_bct = 0;
 		cursado_obrigatorio_curso = 0;
 		cursado_limitado= 0;
@@ -162,19 +145,18 @@ public class FileController extends HttpServlet {
 				es = true;
 			} else if(cursada.getNome().equals("Engenharia de Software") && cursada.getP() == 0){
 				es = true;
-			} else if(cursada.getNome().equals("Programação Estruturada")){
+			} else if(cursada.getNome().equals("ProgramaÃ§Ã£o Estruturada")){
 				pe = true;
 			}
 		}
-		System.out.println("Não Encontradas: "+nao_encontradas.size());
+		System.out.println("NÃ£o Encontradas: "+nao_encontradas.size());
 		
-		//Verificar as convalidações nas disciplinas que não foram encontradas 
+		//Verificar as convalidaÃ§Ãµes nas disciplinas que nÃ£o foram encontradas 
 		ConvalidacaoDAO c_dao = new ConvalidacaoDAO();
 		DisciplinaDAO d_dao = new DisciplinaDAO();
 		convalidacoes = new ArrayList<>();
 		livres = new ArrayList<>();
 		if(!nao_encontradas.isEmpty()){
-			//System.out.println("Convalidações");
 			buscaConvalidacoes(p_id, cod_ppc);
 			System.out.println("Convalidadas: "+convalidacoes.size());
 			boolean convalidado;
@@ -187,28 +169,27 @@ public class FileController extends HttpServlet {
 		System.out.println("Livres: "+livres.size());
 		cursado_livre = 0;
 		for(Disciplina livre : livres){
-			//System.out.println("l: "+livre.getCod_disciplina());
 			cursado_livre += livre.getT() + livre.getP();
 		}
 				
 		//Exibir os resultados da contagem
-		//Faz a soma de todos os créditos contados e as porcentagens de cada tipo de crédito
-		System.out.println("Obrigatórios: "+cursado_obrigatorio_curso + " + " + cursado_bct);
+		//Faz a soma de todos os crÃ©ditos contados e as porcentagens de cada tipo de crÃ©dito
+		System.out.println("ObrigatÃ³rios: "+cursado_obrigatorio_curso + " + " + cursado_bct);
 		System.out.println("Limitados: "+cursado_limitado);
 		System.out.println("Livres: "+cursado_livre);
-		System.out.println("Não Catalogadas: "+nao_catalogada.size());
+		System.out.println("NÃ£o Catalogadas: "+nao_catalogada.size());
 		for(Disciplina catalogada : nao_catalogada){
 			System.out.println("nc: "+catalogada.getCod_disciplina()+" "+catalogada.getNome());
 		}
 		
-		req.setAttribute("msg", "<h1>Relatório da Contagem de Créditos</h1><br>");
+		req.setAttribute("msg", "<h1>RelatÃ³rio da Contagem de CrÃ©ditos</h1><br>");
 
-		//Cálculo das porcentagens de créditos do curso
+		//CÃ¡lculo das porcentagens de crÃ©ditos do curso
 		cursado_total = 0;
 		int excedente = 0;
 		int reduzidos = 0;
 		
-		//Verifica se alguma disciplina foi cursada com redução de créditos
+		//Verifica se alguma disciplina foi cursada com reduÃ§Ã£o de crÃ©ditos
 		if(matriz < 2015){
 			if(bd){
 				reduzidos += 2;
@@ -220,7 +201,7 @@ public class FileController extends HttpServlet {
 				reduzidos = 0;
 			}
 		}
-		//Verifica as quantidades de obrigatórias, limitadas e livres antes de fazer as porcentagens
+		//Verifica as quantidades de obrigatÃ³rias, limitadas e livres antes de fazer as porcentagens
 		int compensados = 0;
 		if(cursado_limitado > cred_limitado_curso){
 			excedente = cursado_limitado - cred_limitado_curso;
@@ -239,12 +220,11 @@ public class FileController extends HttpServlet {
 		}
 		if(cursado_livre > cred_curso_livre){
 			cursado_livre = cred_curso_livre;
-			//cursado_total = cursado_obrigatorio_curso + cursado_bct + cursado_limitado+ cred_curso_livre;
-		} else{
+		}/* else{
 			//cursado_total = cursado_obrigatorio_curso + cursado_bct + cursado_limitado+ cursado_livre;
-		}	
+		}*/	
 		
-		//Cálculos das porcentagens do curso
+		//CÃ¡lculos das porcentagens do curso
 		cursado_total = cursado_obrigatorio_curso + cursado_bct + cursado_limitado+ cursado_livre;
 		cred_total_curso = cred_apenas_curso + cred_obrigatorio_bct;
 		p_bct = (float) (100*cursado_bct)/cred_obrigatorio_bct;
@@ -253,7 +233,7 @@ public class FileController extends HttpServlet {
 		p_limitado = (float) (100*cursado_limitado)/cred_limitado_curso;
 		p_livre = (float) (100*cursado_livre)/cred_curso_livre;
 			
-		//Página de resposta para exibir o relatório
+		//PÃ¡gina de resposta para exibir o relatÃ³rio
 		req.setAttribute("sigla", sigla);
 		req.setAttribute("total_bct", cred_obrigatorio_bct);
 		req.setAttribute("curso_obrigatorio", cred_obrigatorio_curso);
@@ -276,7 +256,7 @@ public class FileController extends HttpServlet {
 		req.setAttribute("livres", livres);
 		req.setAttribute("nao_catalogadas", nao_catalogada);
 
-		//Método para escolher a forma de exibição do relatório
+		//MÃ©todo para escolher a forma de exibiÃ§Ã£o do relatÃ³rio
 		if(opcao.equals("abrir")){
 			RequestDispatcher rd = req.getRequestDispatcher("/relatorio.jsp");
 			rd.forward(req, resp);
@@ -288,45 +268,41 @@ public class FileController extends HttpServlet {
 			String serverHomeDir = System.getenv("CATALINA_HOME");
 			String reportDestination = "C:\\Users\\Erick\\Documents\\eclipse\\"+name;
 			//String reportDestination = name;//Caminho do servidor Tomcat
-			//Diretório do Servidor para baixar o relatório: /home/erickaugusto/Arquivos/ 
+			//DiretÃ³rio do Servidor para baixar o relatÃ³rio: /home/erickaugusto/Arquivos/ 
 			FileInputStream fis = new FileInputStream(new File(reportDestination));
 			org.apache.commons.io.IOUtils.copy(fis, resp.getOutputStream());
 			resp.setContentType("aplication/pdf");
 			resp.setHeader("Content-Disposition", "attachment; filename=" + name);
 			resp.flushBuffer();
 		} else{
-			//Página de erro caso algo não esteja certo
+			//PÃ¡gina de erro caso algo nÃ£o esteja certo
 			RequestDispatcher rd = req.getRequestDispatcher("/error.jsp");
 			rd.forward(req, resp);
 		}
-		//RequestDispatcher rd = req.getRequestDispatcher("/sucesso.jsp");
-		//rd.forward(req, resp);
 	}
 
-	//Método para verificar qual curso será usado para a contagem de créditos
+	//MÃ©todo para verificar qual curso serÃ¡ usado para a contagem de crÃ©ditos
 	public String determinaCurso(String sigla){
 		String curso = "";
 		switch (sigla){
 		case "BCC":
-			curso = "Bacharelado em Ciência da Computação";
+			curso = "Bacharelado em CiÃªncia da ComputaÃ§Ã£o";
 			break;
 		case "BMAT":
-			curso = "Bacharelado em Matemática";
+			curso = "Bacharelado em MatemÃ¡tica";
 			break;
 		case "LMAT":
-			curso = "Licenciatura em Matemática";
+			curso = "Licenciatura em MatemÃ¡tica";
 			break;
 		case "BNC":
-			curso = "Bacharelado em Neurociência";
+			curso = "Bacharelado em NeurociÃªncia";
 			break;
 		}
 		return curso;
 	}
 	
-	//Verifica o nome do arquivo (método padrão que existia na documentação para upload de arquivos)
+	//Verifica o nome do arquivo (mÃ©todo padrÃ£o que existia na documentaÃ§Ã£o para upload de arquivos)
 	private String getFileName(final Part part) {
-	    //final String partHeader = part.getHeader("content-disposition");
-	    //LOGGER.log(Level.INFO, "Part Header = {0}", partHeader);
 	    for (String content : part.getHeader("content-disposition").split(";")) {
 	        if (content.trim().startsWith("filename")) {
 	            return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
@@ -335,7 +311,7 @@ public class FileController extends HttpServlet {
 	    return null;
 	}
 	
-	//Método para ler as informações do histórico do aluno
+	//MÃ©todo para ler as informaÃ§Ãµes do histÃ³rico do aluno
 	public List<Disciplina> lerHistorico(String path, String fileName) throws IOException{
 		FileReader arq = null;
 		List<Disciplina> cursadas = new ArrayList<>();//Preencher com os dados do arquivo do aluno
@@ -347,7 +323,7 @@ public class FileController extends HttpServlet {
 			String linha = buffer.readLine();
 			linha = buffer.readLine();
 			
-			//Laço para a leitura das linhas do arquivo
+			//LaÃ§o para a leitura das linhas do arquivo
 			String[] campos;
 			DisciplinaDAO d_dao = new DisciplinaDAO();
 			while(linha != null){
@@ -355,15 +331,9 @@ public class FileController extends HttpServlet {
 					linha = linha.replaceAll("\"", "");
 					campos = linha.split("\t",-1);
 					if(campos.length > 1){
-						//System.out.println(campos[0]+" "+campos[1]+" "+campos[2]+" "+campos[3]+" "+campos[4]+" "+campos[5]);
 						Disciplina cursada = d_dao.buscaDisciplina(campos[0]);
-						
-						//cursada.setCod_disciplina(campos[0]);
-						//cursada.setNome(campos[1]);
 						if(cursada.getCod_disciplina() != null && (campos[5].equals("Aprovado") || campos[5].equals("Apr.S.Nota") 
 								|| campos[5].equals("Disc.Equiv") || campos[5].equals("Aproveitamento"))){
-							//cursada.setNome(cursada.getNome().toUpperCase());
-							//cursadas.add(cursada);
 							//Lista para armazenar disciplina aprovadas com D e podem ser refeitas
 							if(campos[4].equals("D") && !pendentes.contains(cursada.getNome())){
 								pendentes.add(cursada.getNome());
@@ -376,7 +346,6 @@ public class FileController extends HttpServlet {
 						} else if(cursada.getCod_disciplina() == null && campos.length > 1){
 							if(campos.length > 2 && (campos[5].equals("Aprovado") || campos[5].equals("Apr.S.Nota") 
 									|| campos[5].equals("Disc.Equiv") || campos[5].equals("Aproveitamento"))){
-								//System.out.println("ne: "+campos[0]+" "+campos[1]+" "+campos[2]+" "+campos[3]+" "+campos[4]+" "+campos[5]);
 								Disciplina d = new Disciplina();
 								d.setCod_disciplina(campos[0]);
 								d.setNome(campos[1].toUpperCase());
@@ -390,7 +359,7 @@ public class FileController extends HttpServlet {
 				}
 				if(linha.contains("DISCIPLINAS CURSADAS EM MOBILIDADE")){
 					linha = null;
-					System.out.println("Última linha");
+					System.out.println("Ãšltima linha");
 				} else{
 					linha = buffer.readLine();
 				}
@@ -402,26 +371,24 @@ public class FileController extends HttpServlet {
 		return cursadas;
 	}
 	
-	//Método para ler o arquivo informado pelo usuário
+	//MÃ©todo para ler o arquivo informado pelo usuÃ¡rio
 	public void gravarArquivo(HttpServletRequest req) throws IOException{
 		//path = "C:\\Users\\Erick\\Documents\\Eclipse Projects\\ContCred\\files\\";//Caminho local 1
-		//path = "webapps/upload_files/";//Esse caminho não funciona no servidor Tomcat
+		//path = "webapps/upload_files/";//Esse caminho nÃ£o funciona no servidor Tomcat
 		path = "C:\\Users\\Erick\\Documents\\Files\\";//Caminho local 2
-		//Caminho usado para salvar os arquivos na máquina que está sendo usada como servidor
+		//Caminho usado para salvar os arquivos na mÃ¡quina que estÃ¡ sendo usada como servidor
 		//path = "/home/charles/Documentos/Arquivos_ContCred/";
-		//Diretório do Servidor para salvar o arquivo: /home/erickaugusto/ 
+		//DiretÃ³rio do Servidor para salvar o arquivo: /home/erickaugusto/ 
 		Part filePart = null;
 		try {
 			filePart = req.getPart("file");
 		} catch (IOException | ServletException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    fileName = getFileName(filePart);
 	    System.out.println(fileName);
 	    OutputStream out = null;
 	    InputStream filecontent = null;
-	    //PrintWriter writer = resp.getWriter();
 
 	    try {
 	        out = new FileOutputStream(new File(path + fileName));
@@ -432,14 +399,8 @@ public class FileController extends HttpServlet {
 	        while ((read = filecontent.read(bytes)) != -1) {
 	            out.write(bytes, 0, read);
 	        }
-	        //writer.println("New file " + fileName + " created at " + path);
-	        //LOGGER.log(Level.INFO, "File{0}being uploaded to {1}", new Object[]{fileName, path});
 	    } catch (FileNotFoundException fne) {
-	        /*writer.println("You either did not specify a file to upload or are "
-	                + "trying to upload a file to a protected or nonexistent "
-	                + "location.");*/
-	        //writer.println("<br/> ERROR: " + fne.getMessage());
-	        //LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}", new Object[]{fne.getMessage()});
+		    
 	    } finally {
 	        if (out != null) {
 	            out.close();
@@ -447,14 +408,11 @@ public class FileController extends HttpServlet {
 	        if (filecontent != null) {
 	            filecontent.close();
 	        }
-	        /*if (writer != null) {
-	            writer.close();
-	        }*/
 	        System.out.print("Finalizado");
 	    }
 	}
 	
-	//Método para verificar se a disciplina pertence ao ppc
+	//MÃ©todo para verificar se a disciplina pertence ao ppc
 	public void verificarPPC(Disciplina cursada){
 		int i;
 		boolean encontrada = false;
@@ -462,10 +420,9 @@ public class FileController extends HttpServlet {
 			String cod = grade_ppc.get(i).getCod_disciplina();
 			if(cod.equals(cursada.getCod_disciplina())){
 				encontrada = true;
-				//verifica se é obrigatória ou limitada
+				//verifica se Ã© obrigatÃ³ria ou limitada
 				String status = grade_ppc.get(i).getStatus();
-				if(status.equals("Obrigatória")){
-					//cred_obrigatorio += cursada.getT() + cursada.getP();
+				if(status.equals("ObrigatÃ³ria")){					
 					cursado_obrigatorio_curso += cursada.getT() + cursada.getP();
 					obrigatorias.add(cursada);
 				} else{
@@ -478,42 +435,38 @@ public class FileController extends HttpServlet {
 			String cod = grade_bct.get(i).getCod_disciplina();
 			if(cod.equals(cursada.getCod_disciplina())){
 				encontrada= true;
-				//verifica se é obrigatória
+				//verifica se Ã© obrigatÃ³ria
 				String status = grade_bct.get(i).getStatus();
-				if(status.equals("Obrigatória")){
-					//cred_obrigatorio += cursada.getT() + cursada.getP();
+				if(status.equals("ObrigatÃ³ria")){
 					cursado_bct += cursada.getT() + cursada.getP();
 					obrigatoria_bct.add(cursada);
 				}
 			}
 		}
-		//Disciplina não encontrada
+		//Disciplina nÃ£o encontrada
 		if(encontrada == false){
 			nao_encontradas.add(cursada);
 		}
 	}
 	
-	//Método para verificar se há convalidações no histórico
+	//MÃ©todo para verificar se hÃ¡ convalidaÃ§Ãµes no histÃ³rico
 	public void buscaConvalidacoes(int p_id, int cod_ppc){
 		ConvalidacaoDAO c_dao = new ConvalidacaoDAO();
 		for(Disciplina nao_encontrada : nao_encontradas){
-			//System.out.println(nao_encontrada.getCod_disciplina()+" "+p_id);
 			Convalidacao c = c_dao.buscaConvalidacao(nao_encontrada.getCod_disciplina(), p_id);
 			Convalidacao bct = c_dao.buscaConvalidacao(nao_encontrada.getCod_disciplina(), cod_ppc);
 			if(c.getCod_convalidacao() != null){
-				//System.out.println("c: "+c.getCod_convalidacao());
 				convalidacoes.add(c);
 			} else if(bct.getCod_convalidacao() != null){
 				convalidacoes.add(bct);
 			} else{
 				//Conta como livre
-				//System.out.println("n: "+nao_encontrada.getCod_disciplina()+" "+nao_encontrada.getNome());
 				livres.add(nao_encontrada);
 			}
 		}
 	}
 	
-	//Método para verificar se a convalidação pertence ao PPC
+	//MÃ©todo para verificar se a convalidaÃ§Ã£o pertence ao PPC
 	public void verificaConvalidacao(Convalidacao convalidacao){
 		System.out.println("convalidada: "+convalidacao.getCod_convalidacao());
 		boolean convalidado = false;
@@ -525,22 +478,17 @@ public class FileController extends HttpServlet {
 			String cod = grade_ppc.get(i).getCod_disciplina();
 			if(cod.equals(convalidacao.getCod_convalidacao())){
 				convalidado = true;
-				//Disciplina d = d_dao.buscaDisciplina(convalidacao.getCod_convalidacao());
-				//creditos += d.getT() + d.getP();
-						
-				//System.out.println("convalidada: "+d.getNome()+" "+d.getT()+" "+d.getP());
-				//verifica se é obrigatória ou limitada
+				//verifica se Ã© obrigatÃ³ria ou limitada
 				status = grade_ppc.get(i).getStatus();
-				if(status.equals("Obrigatória")){
-					//Buscar a disciplina de origem para adicionar os créditos e colocar na lista
+				if(status.equals("ObrigatÃ³ria")){
+					//Buscar a disciplina de origem para adicionar os crÃ©ditos e colocar na lista
 					Disciplina convalidada = d_dao.buscaDisciplina(convalidacao.getCod_disciplina());
-					//cred_obrigatorio += convalidada.getT() + convalidada.getP();//d.getT() + d.getP();
 					convalidada.setNome(convalidada.getNome().toUpperCase());
 					cursado_obrigatorio_curso += convalidada.getT() + convalidada.getP();
 					obrigatorias.add(convalidada);
 					System.out.println("origem o: "+convalidada.getNome()+" "+convalidada.getT()+" "+convalidada.getP());
 				} else{
-					//Buscar a disciplina de origem para adicionar os créditos e colocar na lista
+					//Buscar a disciplina de origem para adicionar os crÃ©ditos e colocar na lista
 					Disciplina convalidada = d_dao.buscaDisciplina(convalidacao.getCod_disciplina());
 					convalidada.setNome(convalidada.getNome().toUpperCase());
 					cursado_limitado+= convalidada.getT() + convalidada.getP();//d.getT() + d.getP();
@@ -554,16 +502,12 @@ public class FileController extends HttpServlet {
 			String cod = grade_bct.get(i).getCod_disciplina();
 			if(cod.equals(convalidacao.getCod_convalidacao())){
 				convalidado = true;
-				//Disciplina d = d_dao.buscaDisciplina(convalidacao.getCod_convalidacao());
-						
-				//System.out.println("convalidada: "+d.getNome()+" "+d.getT()+" "+d.getP());
-				//verifica se é obrigatória
+				//verifica se Ã© obrigatÃ³ria
 				status = grade_bct.get(i).getStatus();
-				if(status.equals("Obrigatória")){
-					//Buscar a disciplina de origem para adicionar os créditos e colocar na lista
+				if(status.equals("ObrigatÃ³ria")){
+					//Buscar a disciplina de origem para adicionar os crÃ©ditos e colocar na lista
 					Disciplina convalidada = d_dao.buscaDisciplina(convalidacao.getCod_disciplina());
 					convalidada.setNome(convalidada.getNome().toUpperCase());
-					//cred_obrigatorio += convalidada.getT() + convalidada.getP();//d.getT() + d.getP();
 					cursado_bct += convalidada.getT() + convalidada.getP();
 					obrigatoria_bct.add(convalidada);
 					System.out.println("origem t: "+convalidada.getNome()+" "+convalidada.getT()+" "+convalidada.getP());
@@ -572,23 +516,21 @@ public class FileController extends HttpServlet {
 				}
 			}
 		}
-		//Convalidação não encontrada nos projetos pedagógicos
+		//ConvalidaÃ§Ã£o nÃ£o encontrada nos projetos pedagÃ³gicos
 		if(convalidado == false){
-			//Conta os créditos como livres
-			//Buscar a disciplina de origem para adicionar os créditos e colocar na lista
+			//Conta os crÃ©ditos como livres
+			//Buscar a disciplina de origem para adicionar os crÃ©ditos e colocar na lista
 			Disciplina convalidada = d_dao.buscaDisciplina(convalidacao.getCod_disciplina());
 			convalidada.setNome(convalidada.getNome().toUpperCase());
-			//Disciplina d = d_dao.buscaDisciplina(convalidacao.getCod_convalidacao());
 			livres.add(convalidada);
 			System.out.println("origem l: "+convalidada.getNome()+" "+convalidada.getT()+" "+convalidada.getP());
 		}
 	}
 	
-	//Método para gerar o PDF
+	//MÃ©todo para gerar o PDF
 	public void geraPDF(){
 		Document document = new Document(PageSize.A4);
 		document.setMargins(10, 10, 50, 50);
-		//document.setMarginMirroring(true);
 		String name = nome+"_"+ra+".pdf";
 		name = name.replaceAll(" ", "_");
         try {
@@ -598,10 +540,10 @@ public class FileController extends HttpServlet {
 	        Font title = FontFactory.getFont(FontFactory.TIMES_BOLD,14,BaseColor.BLACK);
 	        Font campos = FontFactory.getFont(FontFactory.TIMES_BOLD,12,BaseColor.WHITE);
 	        
-	        //Cabeçalho das Tabelas de Disciplinas
-	        Paragraph c_1 = new Paragraph("CÓDIGO",campos);
+	        //CabeÃ§alho das Tabelas de Disciplinas
+	        Paragraph c_1 = new Paragraph("CÃ“DIGO",campos);
 	        Paragraph c_2 = new Paragraph("DISCIPLINA",campos);
-	        Paragraph c_3 = new Paragraph("CRÉDITOS",campos);
+	        Paragraph c_3 = new Paragraph("CRÃ‰DITOS",campos);
 	        PdfPCell h_1 = new PdfPCell(c_1);
 	        PdfPCell h_2 = new PdfPCell(c_2);
 	        PdfPCell h_3 = new PdfPCell(c_3);
@@ -615,11 +557,11 @@ public class FileController extends HttpServlet {
 	        //Lista de Disciplinas do BC&T
 	        PdfPTable bct = new PdfPTable(3);
 	        bct.setWidths(new int[]{2,6,2});
-	        //Cabeçalho
+	        //CabeÃ§alho
 	        bct.addCell(h_1);
 	        bct.addCell(h_2);
 	        bct.addCell(h_3);
-	        //Laço para gerar o conteúdo da tabela
+	        //LaÃ§o para gerar o conteÃºdo da tabela
 	        int i, tp = 0;
 	        for(i=0;i<obrigatoria_bct.size();i++){
 	        	Paragraph col1;
@@ -653,19 +595,16 @@ public class FileController extends HttpServlet {
 	        	bct.addCell(linha1);
 	        	bct.addCell(linha2);
 	        	bct.addCell(linha3);
-	        	//bct.addCell(obrigatoria_bct.get(i).getCod_disciplina());
-	        	//bct.addCell(obrigatoria_bct.get(i).getNome());
-	        	//bct.addCell(Integer.toString(tp));
 	        }
 	        
 	        //Lista de Disciplinas do Curso
 	        PdfPTable curso = new PdfPTable(3);
 	        curso.setWidths(new int[]{2,6,2});
-	        //Cabeçalho
+	        //CabeÃ§alho
 	        curso.addCell(h_1);
 	        curso.addCell(h_2);
 	        curso.addCell(h_3);
-	        //Laço para gerar o conteúdo da tabela
+	        //LaÃ§o para gerar o conteÃºdo da tabela
 	        Paragraph col1;
 	        Paragraph col2;
 	        Paragraph col3;
@@ -698,20 +637,16 @@ public class FileController extends HttpServlet {
 	        	curso.addCell(linha1);
 	        	curso.addCell(linha2);
 	        	curso.addCell(linha3);
-	        	//curso.addCell(obrigatorias.get(i).getCod_disciplina());
-	        	//curso.addCell(obrigatorias.get(i).getNome());
-	        	//tp = obrigatorias.get(i).getT() + obrigatorias.get(i).getP();
-	        	//curso.addCell(Integer.toString(tp));
 	        }
 	        
-	        //Lista de Disciplinas de Opção Limitada
+	        //Lista de Disciplinas de OpÃ§Ã£o Limitada
 	        PdfPTable limitada = new PdfPTable(3);
 	        limitada.setWidths(new int[]{2,6,2});
-	        //Cabeçalho
+	        //CabeÃ§alho
 	        limitada.addCell(h_1);
 	        limitada.addCell(h_2);
 	        limitada.addCell(h_3);
-	        //Laço para gerar o conteúdo da tabela
+	        //LaÃ§o para gerar o conteÃºdo da tabela
 	        for(i=0;i<limitadas.size();i++){
 	        	tp = limitadas.get(i).getT() + limitadas.get(i).getP();
 	        	if(i%2==0){
@@ -738,20 +673,16 @@ public class FileController extends HttpServlet {
 	        	limitada.addCell(linha1);
 	        	limitada.addCell(linha2);
 	        	limitada.addCell(linha3);
-	        	//limitada.addCell(limitadas.get(i).getCod_disciplina());
-	        	//limitada.addCell(limitadas.get(i).getNome());
-	        	//tp = limitadas.get(i).getT() + limitadas.get(i).getP();
-	        	//limitada.addCell(Integer.toString(tp));
 	        }
 	        
 	        //Lista de Disciplinas Livres
 	        PdfPTable livre = new PdfPTable(3);
 	        livre.setWidths(new int[]{2,6,2});
-	        //Cabeçalho
+	        //CabeÃ§alho
 	        livre.addCell(h_1);
 	        livre.addCell(h_2);
 	        livre.addCell(h_3);
-	        //Laço para gerar o conteúdo da tabela
+	        //LaÃ§o para gerar o conteÃºdo da tabela
 	        for(i=0;i<livres.size();i++){
 	        	tp = livres.get(i).getT() + livres.get(i).getP();
 	        	if(i%2==0){
@@ -778,20 +709,16 @@ public class FileController extends HttpServlet {
 	        	livre.addCell(linha1);
 	        	livre.addCell(linha2);
 	        	livre.addCell(linha3);
-	        	//livre.addCell(livres.get(i).getCod_disciplina());
-	        	//livre.addCell(livres.get(i).getNome());
-	        	//tp = livres.get(i).getT() + livres.get(i).getP();
-	        	//livre.addCell(Integer.toString(tp));
 	        }
 	        
-	        //Lista de Disciplinas não catalogadas
+	        //Lista de Disciplinas nÃ£o catalogadas
 	        PdfPTable nao_catalogadas = new PdfPTable(3);
 	        nao_catalogadas.setWidths(new int[]{2,6,2});
-	        //Cabeçalho
+	        //CabeÃ§alho
 	        nao_catalogadas.addCell(h_1);
 	        nao_catalogadas.addCell(h_2);
 	        nao_catalogadas.addCell(h_3);
-	        //Laço para gerar o conteúdo da tabela
+	        //LaÃ§o para gerar o conteÃºdo da tabela
 	        for(i=0;i<nao_catalogada.size();i++){
 	        	tp = nao_catalogada.get(i).getT() + nao_catalogada.get(i).getP();
 	        	if(i%2==0){
@@ -818,16 +745,12 @@ public class FileController extends HttpServlet {
 	        	nao_catalogadas.addCell(linha1);
 	        	nao_catalogadas.addCell(linha2);
 	        	nao_catalogadas.addCell(linha3);
-	        	//livre.addCell(livres.get(i).getCod_disciplina());
-	        	//livre.addCell(livres.get(i).getNome());
-	        	//tp = livres.get(i).getT() + livres.get(i).getP();
-	        	//livre.addCell(Integer.toString(tp));
 	        }
 	        
 	        //Montando o arquivo
 	        PdfPTable relatorio = new PdfPTable(1);
 	        
-	        Paragraph p = new Paragraph("RELATÓRIO DO SISTEMA DE CONTAGEM DE CRÉDITOS",title);
+	        Paragraph p = new Paragraph("RELATÃ“RIO DO SISTEMA DE CONTAGEM DE CRÃ‰DITOS",title);
 	        PdfPCell cell = new PdfPCell(p);
 	        cell.setBorder(PdfPCell.NO_BORDER);
 	        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -840,7 +763,7 @@ public class FileController extends HttpServlet {
 	        relatorio.addCell(row);
 	        document.add(relatorio);
 
-	        //Informações do Aluno
+	        //InformaÃ§Ãµes do Aluno
 	        PdfPTable aluno = new PdfPTable(2);
 	        aluno.setWidths(new int[]{1,5});
 	        Paragraph info_nome = new Paragraph("NOME: ",title);
@@ -861,8 +784,6 @@ public class FileController extends HttpServlet {
 	        info4.setBorder(PdfPCell.NO_BORDER);
 	        info5.setBorder(PdfPCell.NO_BORDER);
 	        info6.setBorder(PdfPCell.NO_BORDER);
-	        //aluno.addCell(row);
-	        //aluno.addCell(row);
 	        aluno.addCell(info1);
 	        aluno.addCell(info3);
 	        aluno.addCell(info2);
@@ -872,10 +793,9 @@ public class FileController extends HttpServlet {
 	        aluno.addCell(row);
 	        aluno.addCell(row);
 	        document.add(aluno);
-	        //document.add(new Paragraph(""));
 	        
 	        PdfPTable porcentagens = new PdfPTable(4);
-	        //Cabeçalho
+	        //CabeÃ§alho
 	        Paragraph i_1 = new Paragraph("Tipo de Disciplina",campos);
 	        Paragraph i_2 = new Paragraph("Deve Cursar",campos);
 	        Paragraph i_3 = new Paragraph("Cursou",campos);
@@ -896,7 +816,7 @@ public class FileController extends HttpServlet {
 	        porcentagens.addCell(pc_2);
 	        porcentagens.addCell(pc_3);
 	        porcentagens.addCell(pc_4);
-	        //Conteúdo da tabela informativa
+	        //ConteÃºdo da tabela informativa
 	        Paragraph pg_1;
 	        Paragraph pg_2;
 	        Paragraph pg_3;
@@ -906,7 +826,7 @@ public class FileController extends HttpServlet {
 	        PdfPCell cl_3;
 	        PdfPCell cl_4;
 	        
-	        pg_1 = new Paragraph("Obrigatórias BC&T");
+	        pg_1 = new Paragraph("ObrigatÃ³rias BC&T");
 	        cl_1 = new PdfPCell(pg_1);
 	        cl_1.setBackgroundColor(new BaseColor(204,255,204));
 	        porcentagens.addCell(cl_1);
@@ -923,7 +843,7 @@ public class FileController extends HttpServlet {
 	        cl_4.setBackgroundColor(new BaseColor(204,255,204));
 	        porcentagens.addCell(cl_4);
 	        
-	        pg_1 = new Paragraph("Obrigatórias "+sigla);
+	        pg_1 = new Paragraph("ObrigatÃ³rias "+sigla);
 	        cl_1 = new PdfPCell(pg_1);
 	        cl_1.setBackgroundColor(new BaseColor(255,255,153));
 	        porcentagens.addCell(cl_1);
@@ -994,7 +914,7 @@ public class FileController extends HttpServlet {
 	        document.add(porcentagens);
 	        
 	        PdfPTable bct_table = new PdfPTable(1);
-	        Paragraph p2 = new Paragraph("DISCIPLINAS OBRIGATÓRIAS DO BC&T",title);
+	        Paragraph p2 = new Paragraph("DISCIPLINAS OBRIGATÃ“RIAS DO BC&T",title);
 	        PdfPCell cell2 = new PdfPCell(p2);
 	        cell2.setBorder(PdfPCell.NO_BORDER);
 	        cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1002,13 +922,10 @@ public class FileController extends HttpServlet {
 	        bct_table.addCell(cell2);
 	        bct_table.addCell(row);
 	        document.add(bct_table);
-	        //document.add(new Paragraph(""));
-	        //document.add(new Paragraph(""));
 	        document.add(bct);
-	        //document.add(new Paragraph(""));
 	        
 	        PdfPTable curso_table = new PdfPTable(1);
-	        Paragraph p3 = new Paragraph("DISCIPLINAS OBRIGATÓRIAS DO "+sigla,title);
+	        Paragraph p3 = new Paragraph("DISCIPLINAS OBRIGATÃ“RIAS DO "+sigla,title);
 	        PdfPCell cell3 = new PdfPCell(p3);
 	        cell3.setBorder(PdfPCell.NO_BORDER);
 	        cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1016,10 +933,7 @@ public class FileController extends HttpServlet {
 	        curso_table.addCell(cell3);
 	        curso_table.addCell(row);
 	        document.add(curso_table);
-	        //document.add(new Paragraph(""));
-	        //document.add(new Paragraph(""));
 	        document.add(curso);
-	        //document.add(new Paragraph(""));
 	        
 	        PdfPTable limitadas_table = new PdfPTable(1);
 	        Paragraph p4 = new Paragraph("DISCIPLINAS LIMITADAS DO "+sigla,title);
@@ -1030,10 +944,7 @@ public class FileController extends HttpServlet {
 	        limitadas_table.addCell(cell4);
 	        limitadas_table.addCell(row);
 	        document.add(limitadas_table);
-	        //document.add(new Paragraph(""));
-	        //document.add(new Paragraph(""));
 	        document.add(limitada);
-	        //document.add(new Paragraph(""));
 	        
 	        PdfPTable livres_table = new PdfPTable(1);
 	        Paragraph p5 = new Paragraph("DISCIPLINAS LIVRES DO "+sigla,title);
@@ -1044,12 +955,10 @@ public class FileController extends HttpServlet {
 	        livres_table.addCell(cell5);
 	        livres_table.addCell(row);
 	        document.add(livres_table);
-	        //document.add(new Paragraph(""));
-	        //document.add(new Paragraph(""));
 	        document.add(livre);
 	        
 	        PdfPTable calalogo_table = new PdfPTable(1);
-	        Paragraph p6 = new Paragraph("DISCIPLINAS NÃO ENCONTRADAS NO BANCO DE DADOS DO SISTEMA",title);
+	        Paragraph p6 = new Paragraph("DISCIPLINAS NÃƒO ENCONTRADAS NO BANCO DE DADOS DO SISTEMA",title);
 	        PdfPCell cell6 = new PdfPCell(p6);
 	        cell6.setBorder(PdfPCell.NO_BORDER);
 	        cell6.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1057,8 +966,6 @@ public class FileController extends HttpServlet {
 	        calalogo_table.addCell(cell6);
 	        calalogo_table.addCell(row);
 	        document.add(calalogo_table);
-	        //document.add(new Paragraph(""));
-	        //document.add(new Paragraph(""));
 	        document.add(nao_catalogadas);
 		} catch (FileNotFoundException | DocumentException e) {
 			e.printStackTrace();
