@@ -2,8 +2,16 @@ package controller;
 
 import java.awt.Desktop;
 
+//import org.apache.tomcat.util.http.fileupload.*;
+//import org.apache.tomcat.util.http.fileupload.disk.*;
+//import org.apache.tomcat.util.http.fileupload.servlet.*;
+
+//import java.util.Iterator;
+//import java.util.List;
 import java.io.*;
 import java.util.ArrayList;
+//import java.util.Iterator;
+//import java.util.List;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -15,6 +23,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+//import javax.servlet.http.HttpServlet;
+//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletResponse;
+
+//import org.apache.commons.fileupload.FileItem;
+//import org.apache.commons.fileupload.FileItemFactory;
+//import org.apache.commons.fileupload.FileUploadException;
+//import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.itextpdf.text.BaseColor;
@@ -75,6 +91,7 @@ public class FileController extends HttpServlet {
 	private List<Convalidacao> convalidacoes;
 	private String path;
 	private String fileName;
+	private List<Integer> projetos;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) 
@@ -83,9 +100,11 @@ public class FileController extends HttpServlet {
 		nome = req.getParameter("nome");
 		ra = Integer.parseInt(req.getParameter("ra"));
 		sigla = req.getParameter("curso");
-		matriz = Integer.parseInt(req.getParameter("matriz"));
 		//Determina qual curso será feita a contagem
 		curso = determinaCurso(sigla);
+		System.out.println("ano: "+req.getParameter("ano"));
+		matriz = converteAno(Integer.parseInt(req.getParameter("ano")));
+		//matriz = Integer.parseInt(req.getParameter("matriz"));
 		String opcao = req.getParameter("opcao");
 		System.out.println("opcao: "+opcao);
 		//Buscar a lista de matérias da matriz do curso
@@ -128,6 +147,7 @@ public class FileController extends HttpServlet {
 		obrigatorias = new ArrayList<>();
 		limitadas = new ArrayList<>();
 		obrigatoria_bct = new ArrayList<>();
+		//int cred_obrigatorio = 0;
 		cursado_bct = 0;
 		cursado_obrigatorio_curso = 0;
 		cursado_limitado= 0;
@@ -220,7 +240,8 @@ public class FileController extends HttpServlet {
 		}
 		if(cursado_livre > cred_curso_livre){
 			cursado_livre = cred_curso_livre;
-		}/* else{
+			//cursado_total = cursado_obrigatorio_curso + cursado_bct + cursado_limitado+ cred_curso_livre;
+		} /*else{
 			//cursado_total = cursado_obrigatorio_curso + cursado_bct + cursado_limitado+ cursado_livre;
 		}*/	
 		
@@ -284,25 +305,45 @@ public class FileController extends HttpServlet {
 	//Método para verificar qual curso será usado para a contagem de créditos
 	public String determinaCurso(String sigla){
 		String curso = "";
+		projetos = new ArrayList<>();
 		switch (sigla){
 		case "BCC":
 			curso = "Bacharelado em Ciência da Computação";
+			projetos.add(2006);
+			projetos.add(2009);
+			projetos.add(2010);
+			projetos.add(2015);
 			break;
 		case "BMAT":
 			curso = "Bacharelado em Matemática";
+			projetos.add(2007);
+			projetos.add(2012);
+			projetos.add(2015);
 			break;
 		case "LMAT":
 			curso = "Licenciatura em Matemática";
+			projetos.add(2010);
 			break;
 		case "BNC":
 			curso = "Bacharelado em Neurociência";
+			projetos.add(2010);
+			projetos.add(2015);
 			break;
 		}
 		return curso;
 	}
 	
+	//Método para converter a linha selecionada após a escolha do curso em um valor referente ao ano do projeto
+	public int converteAno(int index){
+		int ano = 0;
+		ano = projetos.get(index);
+		return ano;
+	}
+	
 	//Verifica o nome do arquivo (método padrão que existia na documentação para upload de arquivos)
 	private String getFileName(final Part part) {
+	    //final String partHeader = part.getHeader("content-disposition");
+	    //LOGGER.log(Level.INFO, "Part Header = {0}", partHeader);
 	    for (String content : part.getHeader("content-disposition").split(";")) {
 	        if (content.trim().startsWith("filename")) {
 	            return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
@@ -389,7 +430,6 @@ public class FileController extends HttpServlet {
 	    System.out.println(fileName);
 	    OutputStream out = null;
 	    InputStream filecontent = null;
-
 	    try {
 	        out = new FileOutputStream(new File(path + fileName));
 	        filecontent = filePart.getInputStream();
@@ -400,7 +440,11 @@ public class FileController extends HttpServlet {
 	            out.write(bytes, 0, read);
 	        }
 	    } catch (FileNotFoundException fne) {
-		    
+	        /*writer.println("You either did not specify a file to upload or are "
+	                + "trying to upload a file to a protected or nonexistent "
+	                + "location.");*/
+	        //writer.println("<br/> ERROR: " + fne.getMessage());
+	        //LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}", new Object[]{fne.getMessage()});
 	    } finally {
 	        if (out != null) {
 	            out.close();
@@ -408,6 +452,9 @@ public class FileController extends HttpServlet {
 	        if (filecontent != null) {
 	            filecontent.close();
 	        }
+	        /*if (writer != null) {
+	            writer.close();
+	        }*/
 	        System.out.print("Finalizado");
 	    }
 	}
@@ -422,7 +469,7 @@ public class FileController extends HttpServlet {
 				encontrada = true;
 				//verifica se é obrigatória ou limitada
 				String status = grade_ppc.get(i).getStatus();
-				if(status.equals("Obrigatória")){					
+				if(status.equals("Obrigatória")){
 					cursado_obrigatorio_curso += cursada.getT() + cursada.getP();
 					obrigatorias.add(cursada);
 				} else{
