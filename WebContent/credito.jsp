@@ -21,7 +21,7 @@
 		document.getElementById('ano').value = selected;
 	}
 	var matrizCurso = {};
-	matrizCurso['BCC'] = ['2006', '2009', '2010','2015'];
+	matrizCurso['BCC'] = ['2007', '2009', '2010','2015'];
 	matrizCurso['BMAT'] = ['2010', '2012', '2017'];
 	matrizCurso['BNC'] = ['2010', '2015'];
 	matrizCurso['LMAT'] = ['2010'];
