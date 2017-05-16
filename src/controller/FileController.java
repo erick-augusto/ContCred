@@ -309,16 +309,16 @@ public class FileController extends HttpServlet {
 		switch (sigla){
 		case "BCC":
 			curso = "Bacharelado em Ciência da Computação";
-			projetos.add(2006);
+			projetos.add(2007);
 			projetos.add(2009);
 			projetos.add(2010);
 			projetos.add(2015);
 			break;
 		case "BMAT":
 			curso = "Bacharelado em Matemática";
-			projetos.add(2007);
+			projetos.add(2010);
 			projetos.add(2012);
-			projetos.add(2015);
+			projetos.add(2017);
 			break;
 		case "LMAT":
 			curso = "Licenciatura em Matemática";
