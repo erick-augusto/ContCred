@@ -4,21 +4,43 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Contagem de Créditos</title>
+<title>Contagem de CrÃ©ditos</title>
 <script type="text/javascript">
 	function abrirRelatorio(){
 		document.getElementById('opcao').value = "abrir";
-		//var x = alert(document.getElementById('opcao').value);
-		//if(x == null || x == ""){
-		//	alert("Nulo");
-		//} else{
-		//	alert("Cheio");
-		//}
-		//alert(x);
+		//Passar o valor do ano pelo hidden para nÃ£o ser perdido no mÃ©todo post
+		var matriz = document.getElementById("matriz");
+		var selected = matriz.options[matriz.selectedIndex].value;
+		document.getElementById('ano').value = selected;
 	}
 	function baixarRelatorio(){
 		document.getElementById('opcao').value = "baixar";
-		//alert(document.getElementById('opcao').value);
+		//Passar o valor do ano pelo hidden para nÃ£o ser perdido no mÃ©todo post
+		var matriz = document.getElementById("matriz");
+		var selected = matriz.options[matriz.selectedIndex].value;
+		document.getElementById('ano').value = selected;
+	}
+	var matrizCurso = {};
+	matrizCurso['BCC'] = ['2006', '2009', '2010','2015'];
+	matrizCurso['BMAT'] = ['2010', '2012', '2017'];
+	matrizCurso['BNC'] = ['2010', '2015'];
+	matrizCurso['LMAT'] = ['2010'];
+
+	function ChangeCurso() {
+	    var cursos = document.getElementById("curso");
+	    var listaMatrizes = document.getElementById("matriz");
+	    var selected = cursos.options[cursos.selectedIndex].value;
+	    while (listaMatrizes.options.length) {
+	    	listaMatrizes.remove(0);
+	    }
+	    var matrizes = matrizCurso[selected];
+	    if (matrizes) {
+	        var i;
+	        for (i = 0; i < matrizes.length; i++) {
+	            var matriz = new Option(matrizes[i], i);
+	            listaMatrizes.options.add(matriz);
+	        }
+	    }
 	}
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -64,7 +86,7 @@
 <body>
 <div class="jumbotron">
   <div class="container text-center">
-    <h2>Sistema de Contagem de Créditos</h2>
+    <h2>Sistema de Contagem de CrÃ©ditos</h2>
   </div>
 </div>
 
@@ -74,14 +96,14 @@
       <ul class="nav nav-pills nav-stacked menu row content">
         <li class="fundo"><a href="index.jsp">Home</a></li>
         <li><a href="disciplina.jsp">Disciplina</a></li>
-        <li><a href="ppc.jsp">Projeto Pedagógico</a></li>
-        <li><a href="convalidacao.jsp">Convalidação</a></li>
-        <li><a href="credito.jsp">Contagem de Créditos</a></li>
+        <li><a href="ppc.jsp">Projeto PedagÃ³gico</a></li>
+        <li><a href="convalidacao.jsp">ConvalidaÃ§Ã£o</a></li>
+        <li><a href="credito.jsp">Contagem de CrÃ©ditos</a></li>
       </ul><br>
     </div>
     <div class="col-sm-10">
     	<form role="form" action="upload" method="post" enctype="multipart/form-data">
-	    	<h3>Inicar Contagem de Créditos</h3>
+	    	<h3>Inicar Contagem de CrÃ©ditos</h3>
 	    	<div class="form-group">
 				<label for="nome">Nome do Aluno:</label>
 				<input type="text" name="nome" class="form-control" id="nome"/>
@@ -92,24 +114,27 @@
 			</div>
 			<div class="form-group">
 				<label for="curso">Curso:</label>
-				<select class="form-control" name="curso" id="curso">
-					<option value="BCC">Bacharelado em Ciência da Computação</option>
-					<option value="BMAT">Bacharelado em Matemática</option>
-					<option value="LMAT">Licenciatura em Matemática</option>
-					<option value="BNC">Bacharelado em Neurociência</option>
+				<select class="form-control" name="curso" id="curso" onchange="ChangeCurso()">
+					<option value="">Selecione o Curso</option>
+					<option value="BCC">Bacharelado em CiÃªncia da ComputaÃ§Ã£o</option>
+					<option value="BMAT">Bacharelado em MatemÃ¡tica</option>
+					<option value="LMAT">Licenciatura em MatemÃ¡tica</option>
+					<option value="BNC">Bacharelado em NeurociÃªncia</option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="matriz">Matriz:</label>
-				<input type="text" name="matriz" class="form-control" id="matriz"/>
+				<select class="form-control" name="matriz" id="matriz">
+				</select>
 			</div>
+			<input type="hidden" name="ano" value="" id="ano"/>
 			<div class="form-group">
 				<label for="file">Arquivo:</label>
 				<input type="file" name="file" class="form-control" id="file"/>
 			</div>
 			<input type="hidden" name="opcao" value="" id="opcao"/>
-			<input type="submit" class="btn btn-success" value="Exibir Relatório" onClick="return abrirRelatorio()"/>
-			<input type="submit" class="btn btn-success" value="Baixar Relatório" onClick="return baixarRelatorio()"/>
+			<input type="submit" class="btn btn-success" value="Exibir RelatÃ³rio" onClick="return abrirRelatorio()"/>
+			<input type="submit" class="btn btn-success" value="Baixar RelatÃ³rio" onClick="return baixarRelatorio()"/>
 		</form>
     </div>
   </div>
