@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Cadastro de Convalidações</title>
+<title>Cadastro de ConvalidaÃ§Ãµes</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -48,7 +48,7 @@
 <body>
 <div class="jumbotron">
   <div class="container text-center">
-    <h2>Sistema de Contagem de Créditos</h2>
+    <h2>Sistema de Contagem de CrÃ©ditos</h2>
   </div>
 </div>
 
@@ -58,37 +58,37 @@
       <ul class="nav nav-pills nav-stacked menu row content">
         <li class="fundo"><a href="index.jsp">Home</a></li>
         <li><a href="disciplina.jsp">Disciplina</a></li>
-        <li><a href="ppc.jsp">Projeto Pedagógico</a></li>
-        <li><a href="convalidacao.jsp">Convalidação</a></li>
-        <li><a href="credito.jsp">Contagem de Créditos</a></li>
+        <li><a href="ppc.jsp">Projeto PedagÃ³gico</a></li>
+        <li><a href="convalidacao.jsp">ConvalidaÃ§Ã£o</a></li>
+        <li><a href="credito.jsp">Contagem de CrÃ©ditos</a></li>
       </ul><br>
     </div>
     <div class="col-sm-10">
     	<form role="form" action="controller" method="post">
-    		<h3>Cadastrar Convalidação</h3>
+    		<h3>Cadastrar ConvalidaÃ§Ã£o</h3>
 			<div class="form-group">
-				<label for="cod_disciplina">Código da Disciplina:</label>
+				<label for="cod_disciplina">CÃ³digo da Disciplina que serÃ¡ convalidada:</label>
 				<input type="text" name="cod_disciplina" class="form-control" id="cod_disciplina"/>
 			</div>
 			<div class="form-group">
-				<label for="cod_convalidacao">Código da Convalidação:</label>
+				<label for="cod_convalidacao">CÃ³digo da Disciplina no Projeto:</label>
 				<input type="text" name="cod_convalidacao" class="form-control" id="cod_convalidacao"/>
 			</div>
 			<div class="form-group">
 				<label for="curso">Curso:</label>
 				<select class="form-control" name="curso" id="curso">
-					<option value="BCC">Bacharelado em Ciência da Computação</option>
-					<option value="BCT">Bacharelado em Ciência e Tecnologia</option>
-					<option value="BMAT">Bacharelado em Matemática</option>
-					<option value="BNC">Bacharelado em Neurociência</option>
-					<option value="LMAT">Licenciatura em Matemática</option>	
+					<option value="BCC">Bacharelado em CiÃªncia da ComputaÃ§Ã£o</option>
+					<option value="BCT">Bacharelado em CiÃªncia e Tecnologia</option>
+					<option value="BMAT">Bacharelado em MatemÃ¡tica</option>
+					<option value="BNC">Bacharelado em NeurociÃªncia</option>
+					<option value="LMAT">Licenciatura em MatemÃ¡tica</option>	
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="matriz">Matriz do Projeto:</label>
 				<input type="text" name="matriz" class="form-control" id="matriz"/>
 			</div>
-			<input type="submit" class="btn btn-success" value="Cadastrar Convalidação">
+			<input type="submit" class="btn btn-success" value="Cadastrar ConvalidaÃ§Ã£o">
 			<input type="hidden" name="opcao" value="NovaConvalidacao">
 		</form>
     </div>
