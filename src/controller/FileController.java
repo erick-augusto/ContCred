@@ -374,7 +374,7 @@ public class FileController extends HttpServlet {
 					if(campos.length > 1){
 						Disciplina cursada = d_dao.buscaDisciplina(campos[0]);
 						if(cursada.getCod_disciplina() != null && (campos[5].equals("Aprovado") || campos[5].equals("Apr.S.Nota") 
-								|| campos[5].equals("Disc.Equiv") || campos[5].equals("Aproveitamento"))){
+								|| campos[5].equals("Disc.Equiv") || campos[5].equals("Aproveitamento")) && !campos[6].equals("Erro!")){
 							//Lista para armazenar disciplina aprovadas com D e podem ser refeitas
 							if(campos[4].equals("D") && !pendentes.contains(cursada.getNome())){
 								pendentes.add(cursada.getNome());
