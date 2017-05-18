@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Gerenciamento de Convalidações</title>
+<title>Gerenciamento de ConvalidaÃ§Ãµes</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -49,7 +49,7 @@
 <body>
 <div class="jumbotron">
   <div class="container text-center">
-    <h2>Sistema de Contagem de Créditos</h2>
+    <h2>Sistema de Contagem de CrÃ©ditos</h2>
   </div>
 </div>
 
@@ -59,22 +59,22 @@
       <ul class="nav nav-pills nav-stacked menu row content">
         <li class="fundo"><a href="index.jsp">Home</a></li>
         <li><a href="disciplina.jsp">Disciplina</a></li>
-        <li><a href="ppc.jsp">Projeto Pedagógico</a></li>
-        <li><a href="convalidacao.jsp">Convalidação</a></li>
-        <li><a href="credito.jsp">Contagem de Créditos</a></li>
+        <li><a href="ppc.jsp">Projeto PedagÃ³gico</a></li>
+        <li><a href="convalidacao.jsp">ConvalidaÃ§Ã£o</a></li>
+        <li><a href="credito.jsp">Contagem de CrÃ©ditos</a></li>
       </ul><br>
     </div>
     <div class="col-sm-10">
     	<jsp:useBean id="dao" class="dao.ConvalidacaoDAO"/>
 		<form class="form-horizontal">
-			<a href="cadastraConvalidacao.jsp">Cadastrar Nova Convalidação</a>
-			<h3>Lista de Convalidações Cadastradas</h3>
+			<a href="cadastraConvalidacao.jsp">Cadastrar Nova ConvalidaÃ§Ã£o</a>
+			<h3>Lista de ConvalidaÃ§Ãµes Cadastradas</h3>
 			<table class="table table-striped table-hover">
 				<tr>
-					<th>Código Disciplina</th>
-					<th>Nome da Disciplina</th>
-					<th>Código Convalidação</th>
-					<th>Nome da Convalidação</th>
+					<th>CÃ³digo da Disciplina que serÃ¡ convalidada</th>
+					<th>Nome da Disciplina convalidada</th>
+					<th>CÃ³digo da Disciplina presente no Projeto do Curso</th>
+					<th>Nome da Disciplina do Projeto</th>
 					<th>Curso</th>
 					<th>Matriz</th>
 				</tr>
