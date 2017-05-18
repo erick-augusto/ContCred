@@ -71,10 +71,10 @@
 			<h3>Lista de Convalidações Cadastradas</h3>
 			<table class="table table-striped table-hover">
 				<tr>
-					<th>Código da Disciplina que será convalidada</th>
-					<th>Nome da Disciplina convalidada</th>
-					<th>Código da Disciplina presente no Projeto do Curso</th>
-					<th>Nome da Disciplina do Projeto</th>
+					<th>Código Disciplina</th>
+					<th>Nome da Disciplina</th>
+					<th>Código Convalidação</th>
+					<th>Nome da Convalidação</th>
 					<th>Curso</th>
 					<th>Matriz</th>
 				</tr>
