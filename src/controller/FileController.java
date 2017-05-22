@@ -92,6 +92,8 @@ public class FileController extends HttpServlet {
 	private String path;
 	private String fileName;
 	private List<Integer> projetos;
+	private List<Disciplina> nao_cursadas_bct;
+	private List<Disciplina> nao_cursadas_ppc;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) 
@@ -253,6 +255,14 @@ public class FileController extends HttpServlet {
 		p_total = (float) (100*cursado_total)/cred_total_curso;
 		p_limitado = (float) (100*cursado_limitado)/cred_limitado_curso;
 		p_livre = (float) (100*cursado_livre)/cred_curso_livre;
+		
+		//verifica se faltam disciplinas para serem cursadas
+		if(p_bct < 100){
+			buscaFaltantesBCT();
+		}
+		/*if(p_curso < 100){
+			
+		}*/
 			
 		//Página de resposta para exibir o relatório
 		req.setAttribute("sigla", sigla);
@@ -571,6 +581,28 @@ public class FileController extends HttpServlet {
 			convalidada.setNome(convalidada.getNome().toUpperCase());
 			livres.add(convalidada);
 			System.out.println("origem l: "+convalidada.getNome()+" "+convalidada.getT()+" "+convalidada.getP());
+		}
+	}
+	
+	//Método para buscar as disciplinas ainda não cursadas do BC&T
+	public void buscaFaltantesBCT(){
+		nao_cursadas_bct = new ArrayList<>();
+		int i, j;
+		boolean cursada;
+		for(i=0;i<grade_bct.size();i++){
+			cursada = false;
+			for(j=0;j<obrigatoria_bct.size();j++){
+				if(grade_bct.get(i).getCod_disciplina().equals(obrigatoria_bct.get(j).getCod_disciplina())){
+					cursada = true;
+					j = obrigatoria_bct.size();
+				}
+			}
+			if(cursada == false){
+				DisciplinaDAO dao = new DisciplinaDAO();
+				Disciplina d = dao.buscaDisciplina(grade_bct.get(i).getCod_disciplina());
+				System.out.println("faltantes bct: "+d.getNome());
+				nao_cursadas_bct.add(d);
+			}
 		}
 	}
 	
