@@ -605,6 +605,7 @@ public class FileController extends HttpServlet {
 					DisciplinaDAO dao = new DisciplinaDAO();
 					Disciplina d = dao.buscaDisciplina(grade_bct.get(i).getCod_disciplina());
 					System.out.println("faltantes bct: "+d.getNome());
+					d.setNome(d.getNome().toUpperCase());
 					nao_cursadas_bct.add(d);
 				}
 			}
@@ -642,6 +643,7 @@ public class FileController extends HttpServlet {
 				}
 				if(convalidada == false){
 					System.out.println("faltantes ppc: "+d.getNome());
+					d.setNome(d.getNome().toUpperCase());
 					nao_cursadas_ppc.add(d);
 				}
 			}
@@ -884,6 +886,78 @@ public class FileController extends HttpServlet {
 	        	nao_catalogadas.addCell(linha3);
 	        }
 	        
+	        //Lista de disciplinas não cursadas do BC&T
+	        PdfPTable falta_bct = new PdfPTable(3);
+	        falta_bct.setWidths(new int[]{2,6,2});
+	        //Cabeçalho
+	        falta_bct.addCell(h_1);
+	        falta_bct.addCell(h_2);
+	        falta_bct.addCell(h_3);
+	        //Laço para gerar o conteúdo da tabela
+	        for(i=0;i<nao_cursadas_bct.size();i++){
+	        	tp = nao_cursadas_bct.get(i).getT() + nao_cursadas_bct.get(i).getP();
+	        	if(i%2==0){
+	        		col1 = new Paragraph(nao_cursadas_bct.get(i).getCod_disciplina());
+	        		linha1 = new PdfPCell(col1);
+	        		linha1.setBackgroundColor(new BaseColor(255,102,102));
+	        		col2 = new Paragraph(nao_cursadas_bct.get(i).getNome());
+	        		linha2 = new PdfPCell(col2);
+	        		linha2.setBackgroundColor(new BaseColor(255,102,102));
+	        		col3 = new Paragraph(Integer.toString(tp));
+	        		linha3 = new PdfPCell(col3);
+	        		linha3.setBackgroundColor(new BaseColor(255,102,102));
+	        	} else{
+	        		col1 = new Paragraph(nao_cursadas_bct.get(i).getCod_disciplina());
+	        		linha1 = new PdfPCell(col1);
+	        		linha1.setBackgroundColor(new BaseColor(255,204,204));
+	        		col2 = new Paragraph(nao_cursadas_bct.get(i).getNome());
+	        		linha2 = new PdfPCell(col2);
+	        		linha2.setBackgroundColor(new BaseColor(255,204,204));
+	        		col3 = new Paragraph(Integer.toString(tp));
+	        		linha3 = new PdfPCell(col3);
+	        		linha3.setBackgroundColor(new BaseColor(255,204,204));
+	        	}
+	        	falta_bct.addCell(linha1);
+	        	falta_bct.addCell(linha2);
+	        	falta_bct.addCell(linha3);
+	        }
+	        
+	        //Lista de disciplinas não cursadas do PPC
+	        PdfPTable falta_ppc = new PdfPTable(3);
+	        falta_ppc.setWidths(new int[]{2,6,2});
+	        //Cabeçalho
+	        falta_ppc.addCell(h_1);
+	        falta_ppc.addCell(h_2);
+	        falta_ppc.addCell(h_3);
+	      //Laço para gerar o conteúdo da tabela
+	        for(i=0;i<nao_cursadas_ppc.size();i++){
+	        	tp = nao_cursadas_ppc.get(i).getT() + nao_cursadas_ppc.get(i).getP();
+	        	if(i%2==0){
+	        		col1 = new Paragraph(nao_cursadas_ppc.get(i).getCod_disciplina());
+	        		linha1 = new PdfPCell(col1);
+	        		linha1.setBackgroundColor(new BaseColor(255,102,102));
+	        		col2 = new Paragraph(nao_cursadas_ppc.get(i).getNome());
+	        		linha2 = new PdfPCell(col2);
+	        		linha2.setBackgroundColor(new BaseColor(255,102,102));
+	        		col3 = new Paragraph(Integer.toString(tp));
+	        		linha3 = new PdfPCell(col3);
+	        		linha3.setBackgroundColor(new BaseColor(255,102,102));
+	        	} else{
+	        		col1 = new Paragraph(nao_cursadas_ppc.get(i).getCod_disciplina());
+	        		linha1 = new PdfPCell(col1);
+	        		linha1.setBackgroundColor(new BaseColor(255,204,204));
+	        		col2 = new Paragraph(nao_cursadas_ppc.get(i).getNome());
+	        		linha2 = new PdfPCell(col2);
+	        		linha2.setBackgroundColor(new BaseColor(255,204,204));
+	        		col3 = new Paragraph(Integer.toString(tp));
+	        		linha3 = new PdfPCell(col3);
+	        		linha3.setBackgroundColor(new BaseColor(255,204,204));
+	        	}
+	        	falta_ppc.addCell(linha1);
+	        	falta_ppc.addCell(linha2);
+	        	falta_ppc.addCell(linha3);
+	        }
+	        
 	        //Montando o arquivo
 	        PdfPTable relatorio = new PdfPTable(1);
 	        
@@ -1101,6 +1175,28 @@ public class FileController extends HttpServlet {
 	        livres_table.addCell(row);
 	        document.add(livres_table);
 	        document.add(livre);
+	        
+	        PdfPTable falta_bct_table = new PdfPTable(1);
+	        Paragraph p7 = new Paragraph("DISCIPLINAS QUE FALTAM DO BC&T",title);
+	        PdfPCell cell7 = new PdfPCell(p7);
+	        cell7.setBorder(PdfPCell.NO_BORDER);
+	        cell7.setHorizontalAlignment(Element.ALIGN_CENTER);
+	        falta_bct_table.addCell(row);
+	        falta_bct_table.addCell(cell7);
+	        falta_bct_table.addCell(row);
+	        document.add(falta_bct_table);
+	        document.add(falta_bct);
+	        
+	        PdfPTable falta_ppc_table = new PdfPTable(1);
+	        Paragraph p8 = new Paragraph("DISCIPLINAS QUE FALTAM DO "+sigla,title);
+	        PdfPCell cell8 = new PdfPCell(p8);
+	        cell8.setBorder(PdfPCell.NO_BORDER);
+	        cell8.setHorizontalAlignment(Element.ALIGN_CENTER);
+	        falta_ppc_table.addCell(row);
+	        falta_ppc_table.addCell(cell8);
+	        falta_ppc_table.addCell(row);
+	        document.add(falta_ppc_table);
+	        document.add(falta_ppc);
 	        
 	        PdfPTable calalogo_table = new PdfPTable(1);
 	        Paragraph p6 = new Paragraph("DISCIPLINAS NÃO ENCONTRADAS NO BANCO DE DADOS DO SISTEMA",title);
