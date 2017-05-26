@@ -94,6 +94,7 @@ public class FileController extends HttpServlet {
 	private List<Integer> projetos;
 	private List<Disciplina> nao_cursadas_bct;
 	private List<Disciplina> nao_cursadas_ppc;
+	private String curso_nome;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) 
@@ -104,6 +105,7 @@ public class FileController extends HttpServlet {
 		sigla = req.getParameter("curso");
 		//Determina qual curso será feita a contagem
 		curso = determinaCurso(sigla);
+		curso_nome = curso;
 		System.out.println("ano: "+req.getParameter("ano"));
 		matriz = converteAno(Integer.parseInt(req.getParameter("ano")));
 		//matriz = Integer.parseInt(req.getParameter("matriz"));
@@ -903,26 +905,34 @@ public class FileController extends HttpServlet {
 	        aluno.setWidths(new int[]{1,5});
 	        Paragraph info_nome = new Paragraph("NOME: ",title);
 	        Paragraph info_ra = new Paragraph("RA: ",title);
-	        Paragraph aluno_nome = new Paragraph(nome, title);
+	        Paragraph aluno_nome = new Paragraph(nome,title);
 	        Paragraph aluno_ra = new Paragraph(Integer.toString(ra),title);
 	        Paragraph info_matriz = new Paragraph("MATRIZ: ",title);
 	        Paragraph ano_matriz = new Paragraph(Integer.toString(matriz),title);
+	        Paragraph info_curso = new Paragraph("CURSO: ",title);
+	        Paragraph nome_curso = new Paragraph(curso_nome,title);
 	        PdfPCell info1 = new PdfPCell(info_nome);
 	        PdfPCell info2 = new PdfPCell(info_ra);
 	        PdfPCell info3 = new PdfPCell(aluno_nome);
 	        PdfPCell info4 = new PdfPCell(aluno_ra);
+	        PdfPCell info7 = new PdfPCell(info_curso);
+	        PdfPCell info8 = new PdfPCell(nome_curso);
 	        PdfPCell info5 = new PdfPCell(info_matriz);
 	        PdfPCell info6 = new PdfPCell(ano_matriz);
 	        info1.setBorder(PdfPCell.NO_BORDER);
 	        info2.setBorder(PdfPCell.NO_BORDER);
 	        info3.setBorder(PdfPCell.NO_BORDER);
 	        info4.setBorder(PdfPCell.NO_BORDER);
+	        info7.setBorder(PdfPCell.NO_BORDER);
+	        info8.setBorder(PdfPCell.NO_BORDER);
 	        info5.setBorder(PdfPCell.NO_BORDER);
 	        info6.setBorder(PdfPCell.NO_BORDER);
 	        aluno.addCell(info1);
 	        aluno.addCell(info3);
 	        aluno.addCell(info2);
 	        aluno.addCell(info4);
+	        aluno.addCell(info7);
+	        aluno.addCell(info8);
 	        aluno.addCell(info5);
 	        aluno.addCell(info6);
 	        aluno.addCell(row);
