@@ -78,7 +78,7 @@ public class FileController extends HttpServlet {
 	private int cursado_total = 0;
 	private float p_total = 0.0f;
 	private List<Disciplina> obrigatoria_bct;
-	private List<Disciplina> obrigatoria_curso;
+	private List<Grade> obrigatoria_curso;
 	private List<Disciplina> limitadas;
 	private List<Disciplina> livres;
 	private List<Disciplina> obrigatorias;
@@ -260,9 +260,9 @@ public class FileController extends HttpServlet {
 		if(p_bct < 100){
 			buscaFaltantesBCT();
 		}
-		/*if(p_curso < 100){
-			
-		}*/
+		if(p_curso < 100){
+			buscaFaltantesPPC();
+		}
 			
 		//Página de resposta para exibir o relatório
 		req.setAttribute("sigla", sigla);
@@ -598,12 +598,68 @@ public class FileController extends HttpServlet {
 				}
 			}
 			if(cursada == false){
-				DisciplinaDAO dao = new DisciplinaDAO();
-				Disciplina d = dao.buscaDisciplina(grade_bct.get(i).getCod_disciplina());
-				System.out.println("faltantes bct: "+d.getNome());
-				nao_cursadas_bct.add(d);
+				boolean convalidada = faltanteConvalidada(grade_bct.get(i).getCod_disciplina());
+				if(convalidada == false){
+					DisciplinaDAO dao = new DisciplinaDAO();
+					Disciplina d = dao.buscaDisciplina(grade_bct.get(i).getCod_disciplina());
+					System.out.println("faltantes bct: "+d.getNome());
+					nao_cursadas_bct.add(d);
+				}
 			}
 		}
+	}
+	
+	//Método para buscar as disciplinas ainda não cursadas do PPC
+	public void buscaFaltantesPPC(){
+		nao_cursadas_ppc = new ArrayList<>();
+		obrigatoria_curso = new ArrayList<>();
+		int i, j, k;
+		boolean cursada;
+		for(i=0;i<grade_ppc.size();i++){
+			if(grade_ppc.get(i).getStatus().equals("Obrigatória")){
+				obrigatoria_curso.add(grade_ppc.get(i));
+			}
+		}
+		for(i=0;i<obrigatoria_curso.size();i++){
+			cursada = false;
+			for(j=0;j<obrigatorias.size();j++){
+				if(obrigatoria_curso.get(i).getCod_disciplina().equals(obrigatorias.get(j).getCod_disciplina())){
+					cursada = true;
+					j = obrigatorias.size();
+				}
+			}
+			if(cursada == false){
+				boolean convalidada = false;
+				DisciplinaDAO dao = new DisciplinaDAO();
+				Disciplina d = dao.buscaDisciplina(obrigatoria_curso.get(i).getCod_disciplina());
+				for(k=0;k<convalidacoes.size();k++){
+					if(convalidacoes.get(k).getCod_convalidacao().equals(d.getCod_disciplina())){
+						convalidada = true;
+						//System.out.println("faltantes ppc convalidadas: "+d.getNome());
+					}
+				}
+				if(convalidada == false){
+					System.out.println("faltantes ppc: "+d.getNome());
+					nao_cursadas_ppc.add(d);
+				}
+			}
+		}
+	}
+	
+	//Método para verificar se a disciplina faltante está entre as convalidadas
+	public boolean faltanteConvalidada(String cod_disciplina){
+		boolean convalidada = false;
+		DisciplinaDAO dao = new DisciplinaDAO();
+		Disciplina d = dao.buscaDisciplina(cod_disciplina);
+		int i;
+		for(i=0;i<convalidacoes.size();i++){
+			if(convalidacoes.get(i).getCod_convalidacao().equals(d.getCod_disciplina())){
+				convalidada = true;
+				i = convalidacoes.size();
+				//System.out.println("faltantes ppc convalidadas: "+d.getNome());
+			}
+		}
+		return convalidada;
 	}
 	
 	//Método para gerar o PDF
