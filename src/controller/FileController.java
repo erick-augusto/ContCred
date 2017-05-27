@@ -259,6 +259,8 @@ public class FileController extends HttpServlet {
 		p_livre = (float) (100*cursado_livre)/cred_curso_livre;
 		
 		//verifica se faltam disciplinas para serem cursadas
+		nao_cursadas_bct = new ArrayList<>();
+		nao_cursadas_ppc = new ArrayList<>();
 		if(p_bct < 100){
 			buscaFaltantesBCT();
 		}
@@ -588,7 +590,6 @@ public class FileController extends HttpServlet {
 	
 	//Método para buscar as disciplinas ainda não cursadas do BC&T
 	public void buscaFaltantesBCT(){
-		nao_cursadas_bct = new ArrayList<>();
 		int i, j;
 		boolean cursada;
 		for(i=0;i<grade_bct.size();i++){
@@ -614,7 +615,6 @@ public class FileController extends HttpServlet {
 	
 	//Método para buscar as disciplinas ainda não cursadas do PPC
 	public void buscaFaltantesPPC(){
-		nao_cursadas_ppc = new ArrayList<>();
 		obrigatoria_curso = new ArrayList<>();
 		int i, j, k;
 		boolean cursada;
@@ -863,23 +863,23 @@ public class FileController extends HttpServlet {
 	        	if(i%2==0){
 	        		col1 = new Paragraph(nao_catalogada.get(i).getCod_disciplina());
 	        		linha1 = new PdfPCell(col1);
-	        		linha1.setBackgroundColor(new BaseColor(204,255,204));
+	        		linha1.setBackgroundColor(new BaseColor(255,102,102));
 	        		col2 = new Paragraph(nao_catalogada.get(i).getNome());
 	        		linha2 = new PdfPCell(col2);
-	        		linha2.setBackgroundColor(new BaseColor(204,255,204));
+	        		linha2.setBackgroundColor(new BaseColor(255,102,102));
 	        		col3 = new Paragraph(Integer.toString(tp));
 	        		linha3 = new PdfPCell(col3);
-	        		linha3.setBackgroundColor(new BaseColor(204,255,204));
+	        		linha3.setBackgroundColor(new BaseColor(255,102,102));
 	        	} else{
 	        		col1 = new Paragraph(nao_catalogada.get(i).getCod_disciplina());
 	        		linha1 = new PdfPCell(col1);
-	        		linha1.setBackgroundColor(new BaseColor(255,255,153));
+	        		linha1.setBackgroundColor(new BaseColor(255,204,204));
 	        		col2 = new Paragraph(nao_catalogada.get(i).getNome());
 	        		linha2 = new PdfPCell(col2);
-	        		linha2.setBackgroundColor(new BaseColor(255,255,153));
+	        		linha2.setBackgroundColor(new BaseColor(255,204,204));
 	        		col3 = new Paragraph(Integer.toString(tp));
 	        		linha3 = new PdfPCell(col3);
-	        		linha3.setBackgroundColor(new BaseColor(255,255,153));
+	        		linha3.setBackgroundColor(new BaseColor(255,204,204));
 	        	}
 	        	nao_catalogadas.addCell(linha1);
 	        	nao_catalogadas.addCell(linha2);
