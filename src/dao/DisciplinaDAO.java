@@ -131,4 +131,30 @@ public class DisciplinaDAO {
 		}
 		return nome;
 	}
+	
+	public List<Disciplina> letraDisciplina(String letra){
+		List<Disciplina> disciplinas = new ArrayList<>();
+		//System.out.println("letra: "+letra);
+		String sql = "select * from disciplinas where nome like ? order by nome";
+		try{
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			stmt.setString(1, letra+"%");
+			
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				Disciplina d = new Disciplina();
+				d.setCod_disciplina(rs.getString("cod"));
+				d.setNome(rs.getString("nome").toUpperCase());
+				d.setT(rs.getInt("t"));
+				d.setP(rs.getInt("p"));
+				d.setI(rs.getInt("i"));
+				disciplinas.add(d);
+			}			
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return disciplinas;
+	}
 }
