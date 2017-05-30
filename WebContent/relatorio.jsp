@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Sucesso</title>
+<title>RelatÃ³rio</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -49,7 +49,7 @@
 <body>
 <div class="jumbotron">
   <div class="container text-center">
-    <h2>Sistema de Contagem de Créditos</h2>
+    <h2>Sistema de Contagem de CrÃ©ditos</h2>
   </div>
 </div>
 
@@ -59,9 +59,9 @@
       <ul class="nav nav-pills nav-stacked menu row content">
         <li class="fundo"><a href="index.jsp">Home</a></li>
         <li><a href="disciplina.jsp">Disciplina</a></li>
-        <li><a href="ppc.jsp">Projeto Pedagógico</a></li>
-        <li><a href="convalidacao.jsp">Convalidação</a></li>
-        <li><a href="credito.jsp">Contagem de Créditos</a></li>
+        <li><a href="ppc.jsp">Projeto PedagÃ³gico</a></li>
+        <li><a href="convalidacao.jsp">ConvalidaÃ§Ã£o</a></li>
+        <li><a href="credito.jsp">Contagem de CrÃ©ditos</a></li>
       </ul><br>
     </div>
     <div class="col-sm-10">
@@ -78,13 +78,13 @@
 				<th>Procentagem</th>
 			</tr>
 			<tr>
-				<td>Obrigatórias BC&T</td>
+				<td>ObrigatÃ³rias BC&T</td>
 				<td>${requestScope.total_bct}</td>
 				<td>${requestScope.cursada_bct}</td>
 				<td>${requestScope.p_bct}</td>
 			</tr>
 			<tr>
-				<td>Obrigatórias ${requestScope.sigla}</td>
+				<td>ObrigatÃ³rias ${requestScope.sigla}</td>
 				<td>${requestScope.curso_obrigatorio}</td>
 				<td>${requestScope.cursada_curso}</td>
 				<td>${requestScope.p_curso}</td>
@@ -109,12 +109,12 @@
 			</tr>
 		</table>
 
-		<h3>Obrigatórias do BC&T</h3>
+		<h3>ObrigatÃ³rias do BC&T</h3>
 		<table class="table table-striped table-hover">
 			<tr>
-				<th>Código</th>
+				<th>CÃ³digo</th>
 				<th>Disciplina</th>
-				<th>Créditos</th>
+				<th>CrÃ©ditos</th>
 			</tr>
 			<c:forEach var="disciplina" items="${requestScope.bct}">
 				<tr>
@@ -125,12 +125,12 @@
 			</c:forEach>
 		</table>
 
-		<h3>Obrigatórias do ${requestScope.sigla}</h3>
+		<h3>ObrigatÃ³rias do ${requestScope.sigla}</h3>
 		<table class="table table-striped table-hover">
 			<tr>
-				<th>Código</th>
+				<th>CÃ³digo</th>
 				<th>Disciplina</th>
-				<th>Créditos</th>
+				<th>CrÃ©ditos</th>
 			</tr>
 			<c:forEach var="disciplina" items="${requestScope.curso}">
 				<tr>
@@ -144,9 +144,9 @@
 		<h3>Limitadas do ${requestScope.sigla}</h3>
 		<table class="table table-striped table-hover">
 			<tr>
-				<th>Código</th>
+				<th>CÃ³digo</th>
 				<th>Disciplina</th>
-				<th>Créditos</th>
+				<th>CrÃ©ditos</th>
 			</tr>
 			<c:forEach var="disciplina" items="${requestScope.limitadas}">
 				<tr>
@@ -160,9 +160,9 @@
 		<h3>Livres do ${requestScope.sigla}</h3>
 		<table class="table table-striped table-hover">
 			<tr>
-				<th>Código</th>
+				<th>CÃ³digo</th>
 				<th>Disciplina</th>
-				<th>Créditos</th>
+				<th>CrÃ©ditos</th>
 			</tr>
 			<c:forEach var="disciplina" items="${requestScope.livres}">
 				<tr>
@@ -173,12 +173,12 @@
 			</c:forEach>
 		</table>
 		
-		<h3>Disciplinas não encontradas no Banco de Dados do Sistema</h3>
+		<h3>Disciplinas nÃ£o encontradas no Banco de Dados do Sistema</h3>
 		<table class="table table-striped table-hover">
 			<tr>
-				<th>Código</th>
+				<th>CÃ³digo</th>
 				<th>Disciplina</th>
-				<th>Créditos</th>
+				<th>CrÃ©ditos</th>
 			</tr>
 			<c:forEach var="disciplina" items="${requestScope.nao_catalogadas}">
 				<tr>
