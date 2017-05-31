@@ -1213,4 +1213,9 @@ public class FileController extends HttpServlet {
 		}
         document.close();
 	}
+	
+	//Método para iterar as listas e gerar a tabela que será retornada para cada lista
+	public void geraTabela(){
+		
+	}
 }
