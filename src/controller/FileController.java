@@ -1214,8 +1214,65 @@ public class FileController extends HttpServlet {
         document.close();
 	}
 	
-	//Método para iterar as listas e gerar a tabela que será retornada para cada lista
-	public void geraTabela(){
-		
+	//Método para preencher as tabelas com as listas e retornar o resultado para o arquivo
+	public PdfPTable preencheTabela(PdfPCell h_1, PdfPCell h_2, PdfPCell h_3, List<Disciplina> atual, boolean falta){
+		PdfPTable tabela_universal = new PdfPTable(3);
+		try {
+			tabela_universal.setWidths(new int[]{2,6,2});
+			//Cabeçalho
+			tabela_universal.addCell(h_1);
+			tabela_universal.addCell(h_2);
+			tabela_universal.addCell(h_3);
+	        //Laço para gerar o conteúdo da tabela
+	        int i, tp = 0;
+	        for(i=0;i<atual.size();i++){
+	        	Paragraph col1;
+		        Paragraph col2;
+		        Paragraph col3;
+		        PdfPCell linha1;
+		        PdfPCell linha2;
+		        PdfPCell linha3;
+	        	tp = atual.get(i).getT() + atual.get(i).getP();
+	        	if(i%2==0){
+	        		col1 = new Paragraph(atual.get(i).getCod_disciplina());
+	        		linha1 = new PdfPCell(col1);
+	        		col2 = new Paragraph(atual.get(i).getNome());
+	        		linha2 = new PdfPCell(col2);
+	        		col3 = new Paragraph(Integer.toString(tp));
+	        		linha3 = new PdfPCell(col3);
+	        		if(falta == true){
+	        			linha1.setBackgroundColor(new BaseColor(255,102,102));
+		        		linha2.setBackgroundColor(new BaseColor(255,102,102));
+		        		linha3.setBackgroundColor(new BaseColor(255,102,102));
+	        		} else{
+	        			linha1.setBackgroundColor(new BaseColor(204,255,204));
+		        		linha2.setBackgroundColor(new BaseColor(204,255,204));
+		        		linha3.setBackgroundColor(new BaseColor(204,255,204));
+	        		}
+	        	} else{
+	        		col1 = new Paragraph(atual.get(i).getCod_disciplina());
+	        		linha1 = new PdfPCell(col1);
+	        		col2 = new Paragraph(atual.get(i).getNome());
+	        		linha2 = new PdfPCell(col2);
+	        		col3 = new Paragraph(Integer.toString(tp));
+	        		linha3 = new PdfPCell(col3);
+	        		if(falta == true){
+	        			linha1.setBackgroundColor(new BaseColor(255,204,204));
+		        		linha2.setBackgroundColor(new BaseColor(255,204,204));
+		        		linha3.setBackgroundColor(new BaseColor(255,204,204));
+	        		} else{
+	        			linha1.setBackgroundColor(new BaseColor(255,255,153));
+		        		linha2.setBackgroundColor(new BaseColor(255,255,153));
+		        		linha3.setBackgroundColor(new BaseColor(255,255,153));
+	        		}
+	        	}
+	        	tabela_universal.addCell(linha1);
+	        	tabela_universal.addCell(linha2);
+	        	tabela_universal.addCell(linha3);
+	        }
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+        return tabela_universal;
 	}
 }
