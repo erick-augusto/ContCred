@@ -693,6 +693,7 @@ public class FileController extends HttpServlet {
 	        h_3.setHorizontalAlignment(Element.ALIGN_CENTER);
 	        h_3.setBackgroundColor(new BaseColor(0,102,0));
 	        
+	        int i, tp = 0;
 	        //Lista de Disciplinas do BC&T
 	        PdfPTable bct = preencheTabela(h_1,h_2,h_3,obrigatoria_bct, false);//new PdfPTable(3);
 	        /*bct.setWidths(new int[]{2,6,2});
@@ -737,8 +738,8 @@ public class FileController extends HttpServlet {
 	        }*/
 	        
 	        //Lista de Disciplinas do Curso
-	        PdfPTable curso = new PdfPTable(3);
-	        curso.setWidths(new int[]{2,6,2});
+	        PdfPTable curso = preencheTabela(h_1,h_2,h_3,obrigatorias, false);//new PdfPTable(3);
+	        /*curso.setWidths(new int[]{2,6,2});
 	        //Cabeçalho
 	        curso.addCell(h_1);
 	        curso.addCell(h_2);
@@ -776,11 +777,11 @@ public class FileController extends HttpServlet {
 	        	curso.addCell(linha1);
 	        	curso.addCell(linha2);
 	        	curso.addCell(linha3);
-	        }
+	        }*/
 	        
 	        //Lista de Disciplinas de Opção Limitada
-	        PdfPTable limitada = new PdfPTable(3);
-	        limitada.setWidths(new int[]{2,6,2});
+	        PdfPTable limitada = preencheTabela(h_1,h_2,h_3,limitadas, false);//new PdfPTable(3);
+	        /*limitada.setWidths(new int[]{2,6,2});
 	        //Cabeçalho
 	        limitada.addCell(h_1);
 	        limitada.addCell(h_2);
@@ -812,11 +813,11 @@ public class FileController extends HttpServlet {
 	        	limitada.addCell(linha1);
 	        	limitada.addCell(linha2);
 	        	limitada.addCell(linha3);
-	        }
+	        }*/
 	        
 	        //Lista de Disciplinas Livres
-	        PdfPTable livre = new PdfPTable(3);
-	        livre.setWidths(new int[]{2,6,2});
+	        PdfPTable livre = preencheTabela(h_1,h_2,h_3,livres, false);//new PdfPTable(3);
+	        /*livre.setWidths(new int[]{2,6,2});
 	        //Cabeçalho
 	        livre.addCell(h_1);
 	        livre.addCell(h_2);
@@ -848,11 +849,11 @@ public class FileController extends HttpServlet {
 	        	livre.addCell(linha1);
 	        	livre.addCell(linha2);
 	        	livre.addCell(linha3);
-	        }
+	        }*/
 	        
 	        //Lista de Disciplinas não catalogadas
-	        PdfPTable nao_catalogadas = new PdfPTable(3);
-	        nao_catalogadas.setWidths(new int[]{2,6,2});
+	        PdfPTable nao_catalogadas = preencheTabela(h_1,h_2,h_3,nao_catalogada, true);//new PdfPTable(3);
+	        /*nao_catalogadas.setWidths(new int[]{2,6,2});
 	        //Cabeçalho
 	        nao_catalogadas.addCell(h_1);
 	        nao_catalogadas.addCell(h_2);
@@ -884,11 +885,11 @@ public class FileController extends HttpServlet {
 	        	nao_catalogadas.addCell(linha1);
 	        	nao_catalogadas.addCell(linha2);
 	        	nao_catalogadas.addCell(linha3);
-	        }
+	        }*/
 	        
 	        //Lista de disciplinas não cursadas do BC&T
-	        PdfPTable falta_bct = new PdfPTable(3);
-	        falta_bct.setWidths(new int[]{2,6,2});
+	        PdfPTable falta_bct = preencheTabela(h_1,h_2,h_3,nao_cursadas_bct, true);//new PdfPTable(3);
+	        /*falta_bct.setWidths(new int[]{2,6,2});
 	        //Cabeçalho
 	        falta_bct.addCell(h_1);
 	        falta_bct.addCell(h_2);
@@ -920,11 +921,11 @@ public class FileController extends HttpServlet {
 	        	falta_bct.addCell(linha1);
 	        	falta_bct.addCell(linha2);
 	        	falta_bct.addCell(linha3);
-	        }
+	        }*/
 	        
 	        //Lista de disciplinas não cursadas do PPC
-	        PdfPTable falta_ppc = new PdfPTable(3);
-	        falta_ppc.setWidths(new int[]{2,6,2});
+	        PdfPTable falta_ppc = preencheTabela(h_1,h_2,h_3,nao_cursadas_ppc, true);//new PdfPTable(3);
+	        /*falta_ppc.setWidths(new int[]{2,6,2});
 	        //Cabeçalho
 	        falta_ppc.addCell(h_1);
 	        falta_ppc.addCell(h_2);
@@ -956,7 +957,7 @@ public class FileController extends HttpServlet {
 	        	falta_ppc.addCell(linha1);
 	        	falta_ppc.addCell(linha2);
 	        	falta_ppc.addCell(linha3);
-	        }
+	        }*/
 	        
 	        //Montando o arquivo
 	        PdfPTable relatorio = new PdfPTable(1);
@@ -1213,7 +1214,7 @@ public class FileController extends HttpServlet {
 		}
         document.close();
 	}
-	
+
 	//Método para preencher as tabelas com as listas e retornar o resultado para o arquivo
 	public PdfPTable preencheTabela(PdfPCell h_1, PdfPCell h_2, PdfPCell h_3, List<Disciplina> atual, boolean falta){
 		PdfPTable tabela_universal = new PdfPTable(3);
@@ -1225,13 +1226,13 @@ public class FileController extends HttpServlet {
 			tabela_universal.addCell(h_3);
 	        //Laço para gerar o conteúdo da tabela
 	        int i, tp = 0;
+	        Paragraph col1;
+	        Paragraph col2;
+	        Paragraph col3;
+	        PdfPCell linha1;
+	        PdfPCell linha2;
+	        PdfPCell linha3;
 	        for(i=0;i<atual.size();i++){
-	        	Paragraph col1;
-		        Paragraph col2;
-		        Paragraph col3;
-		        PdfPCell linha1;
-		        PdfPCell linha2;
-		        PdfPCell linha3;
 	        	tp = atual.get(i).getT() + atual.get(i).getP();
 	        	if(i%2==0){
 	        		col1 = new Paragraph(atual.get(i).getCod_disciplina());
