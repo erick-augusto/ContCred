@@ -693,7 +693,7 @@ public class FileController extends HttpServlet {
 	        h_3.setHorizontalAlignment(Element.ALIGN_CENTER);
 	        h_3.setBackgroundColor(new BaseColor(0,102,0));
 	        
-	        int i, tp = 0;
+	        //int i, tp = 0;
 	        //Lista de Disciplinas do BC&T
 	        PdfPTable bct = preencheTabela(h_1,h_2,h_3,obrigatoria_bct, false);
 	        
