@@ -161,6 +161,7 @@ public class FileController extends HttpServlet {
 		boolean pe = false;
 		for(Disciplina cursada : cursadas){
 			verificarPPC(cursada);
+			//Tratando casos especiais devido a mudanças nas disciplinas
 			if(cursada.getNome().equals("BANCO DE DADOS") && cursada.getP() == 0){
 				bd = true;
 			} else if(cursada.getNome().equals("Banco de Dados") && cursada.getP() == 0){
