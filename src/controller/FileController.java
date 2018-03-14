@@ -206,8 +206,6 @@ public class FileController extends HttpServlet {
 		for(Disciplina catalogada : nao_catalogada){
 			System.out.println("nc: "+catalogada.getCod_disciplina()+" "+catalogada.getNome());
 		}
-		
-		req.setAttribute("msg", "<h1>Relatório da Contagem de Créditos</h1><br>");
 
 		//Cálculo das porcentagens de créditos do curso
 		cursado_total = 0;
@@ -270,6 +268,7 @@ public class FileController extends HttpServlet {
 		}
 			
 		//Página de resposta para exibir o relatório
+		req.setAttribute("msg", "<h1>Relatório da Contagem de Créditos</h1><br>");
 		req.setAttribute("sigla", sigla);
 		req.setAttribute("total_bct", cred_obrigatorio_bct);
 		req.setAttribute("curso_obrigatorio", cred_obrigatorio_curso);
