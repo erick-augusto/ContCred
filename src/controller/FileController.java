@@ -57,6 +57,7 @@ import model.PPC;
 @MultipartConfig
 public class FileController extends HttpServlet {
 	
+	//Variáveis Globais usadas nos métodos para a contagem de créditos
 	private String nome = "";
 	private int ra = 0;
 	private String sigla = "";
