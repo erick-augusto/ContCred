@@ -101,6 +101,7 @@ public class FileController extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) 
 			throws ServletException, IOException {
 		
+		//Atribuindo valores as variáveis
 		nome = req.getParameter("nome");
 		ra = Integer.parseInt(req.getParameter("ra"));
 		sigla = req.getParameter("curso");
