@@ -147,9 +147,10 @@ public class FileController extends HttpServlet {
 		
 		gravarArquivo(req);
 
-	    cursadas = lerHistorico(path,fileName);
-	    System.out.println("pendentes: "+pendentes.size());
-	    nao_encontradas = new ArrayList<>();
+	    	//Ler histórico e inicar listas
+	    	cursadas = lerHistorico(path,fileName);
+	   	System.out.println("pendentes: "+pendentes.size());
+	   	nao_encontradas = new ArrayList<>();
 		obrigatorias = new ArrayList<>();
 		limitadas = new ArrayList<>();
 		obrigatoria_bct = new ArrayList<>();
