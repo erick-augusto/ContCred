@@ -162,6 +162,7 @@ public class FileController extends HttpServlet {
 		boolean bd = false;
 		boolean es = false;
 		boolean pe = false;
+		//Iterando disciplinas cursadas
 		for(Disciplina cursada : cursadas){
 			verificarPPC(cursada);
 			//Tratando casos especiais devido a mudanças nas disciplinas
