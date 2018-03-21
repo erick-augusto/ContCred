@@ -185,6 +185,7 @@ public class FileController extends HttpServlet {
 		DisciplinaDAO d_dao = new DisciplinaDAO();
 		convalidacoes = new ArrayList<>();
 		livres = new ArrayList<>();
+		//Verifica se as não encontradas tem convalidações
 		if(!nao_encontradas.isEmpty()){
 			buscaConvalidacoes(p_id, cod_ppc);
 			System.out.println("Convalidadas: "+convalidacoes.size());
